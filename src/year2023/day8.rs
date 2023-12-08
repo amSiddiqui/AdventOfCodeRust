@@ -1,9 +1,10 @@
 use std::collections::HashMap;
 use std::fs;
+use crate::traits::Day;
 
 type Node = [u8; 3];
 
-struct Day8 {
+pub struct Day8 {
     moves: Vec<bool>,
     n: usize,
     map: HashMap<Node, (Node, Node)>
@@ -18,7 +19,7 @@ impl Day8 {
             Some([bytes[0], bytes[1], bytes[2]])
         }
     }
-    fn parse_input() -> Day8 {
+    pub fn new() -> Day8 {
         let data = fs::read_to_string("data/day8").unwrap_or_default();
         assert!(!data.is_empty());
         let mut parts = data.split_terminator('\n');
@@ -47,21 +48,7 @@ impl Day8 {
         }
     }
 
-    fn part_1(&self) -> i32 {
-        let mut start = b"AAA";
-        let mut count = 0;
-        while start != b"ZZZ" {
-            let (left, right) = &self.map[start];
-            if self.moves[count % self.n] {
-                start = right;
-            } else {
-                start = left;
-            }
 
-            count += 1;
-        }
-        count as i32
-    }
 
     fn distance_till_z<'a>(&'a self, mut start: &'a Node) -> i32{
         let mut count = 0;
@@ -94,6 +81,26 @@ impl Day8 {
         res
     }
 
+
+}
+
+impl Day for Day8 {
+    fn part_1(&self) -> u64 {
+        let mut start = b"AAA";
+        let mut count = 0;
+        while start != b"ZZZ" {
+            let (left, right) = &self.map[start];
+            if self.moves[count % self.n] {
+                start = right;
+            } else {
+                start = left;
+            }
+
+            count += 1;
+        }
+        count as u64
+    }
+
     fn part_2(&self) -> u64 {
         let distances:Vec<i32> = self.map.keys()
             .filter_map(|x| {
@@ -111,17 +118,18 @@ impl Day8 {
 
 #[cfg(test)]
 mod tests {
+    use crate::traits::Day;
     use crate::year2023::day8::Day8;
 
     #[test]
     fn test_part1() {
-        let day = Day8::parse_input();
+        let day = Day8::new();
         assert_eq!(20777, day.part_1());
     }
 
     #[test]
     fn test_part2() {
-        let day = Day8::parse_input();
+        let day = Day8::new();
         let res = day.part_2();
         assert_eq!(13289612809129, res);
     }
