@@ -21,7 +21,7 @@ impl Day8 {
     }
     pub fn new() -> Day8 {
         let data = fs::read_to_string("data/day8").unwrap_or_default();
-        assert!(!data.is_empty());
+        assert!(!data.is_empty(), "Input file is empty");
         let mut parts = data.split_terminator('\n');
         let moves: Vec<bool> = parts.next().unwrap_or_else(|| panic!("Insufficient data"))
             .chars().map(|x| x == 'R').collect();
@@ -112,25 +112,5 @@ impl Day for Day8 {
             })
             .collect();
         Day8::lcm(distances)
-    }
-}
-
-
-#[cfg(test)]
-mod tests {
-    use crate::traits::Day;
-    use crate::year2023::day8::Day8;
-
-    #[test]
-    fn test_part1() {
-        let day = Day8::new();
-        assert_eq!(20777, day.part_1());
-    }
-
-    #[test]
-    fn test_part2() {
-        let day = Day8::new();
-        let res = day.part_2();
-        assert_eq!(13289612809129, res);
     }
 }

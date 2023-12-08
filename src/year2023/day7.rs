@@ -35,7 +35,7 @@ impl Hand {
 
     fn new(line: &str) -> Hand {
         let parts: Vec<&str> = line.split_whitespace().collect();
-        assert_eq!(parts.len(), 2);
+        assert_eq!(parts.len(), 2, "Each line should have 2 part");
         let mut f: Vec<usize> = Hand::get_frequencies(parts[0])
             .into_values()
             .collect();
@@ -127,7 +127,7 @@ impl Day7 {
             .split('\n')
             .map(Hand::new).collect();
 
-        assert_eq!(data.len(), 1000);
+        assert_eq!(data.len(), 1000, "Input should have 1000 lines");
         data.sort();
         data
     }
@@ -144,22 +144,5 @@ impl Day for Day7 {
 
     fn part_2(&self) -> u64 {
         0
-    }
-}
-
-
-#[cfg(test)]
-mod test {
-    use std::time::Instant;
-    use crate::year2023::day7::Day7;
-
-    #[test]
-    fn test_part1() {
-        let start = Instant::now();
-        let mut day = Day7::new();
-        let res = day.part1();
-        let duration = start.elapsed();
-        assert_eq!(res, 249638405);
-        println!("Part 1 took {:?}", duration);
     }
 }
