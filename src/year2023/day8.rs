@@ -1,14 +1,16 @@
 use std::collections::HashMap;
 use std::fs;
 
+type Node = [u8; 3];
+
 struct Day8 {
     moves: Vec<bool>,
     n: usize,
-    map: HashMap<[u8; 3], ([u8; 3], [u8; 3])>
+    map: HashMap<Node, (Node, Node)>
 }
 
 impl Day8 {
-    fn str_to_u8_array(s: &str) -> Option<[u8; 3]> {
+    fn str_to_u8_array(s: &str) -> Option<Node> {
         let bytes = s.as_bytes();
         if bytes.len() != 3 {
             None
@@ -60,6 +62,50 @@ impl Day8 {
         }
         count as i32
     }
+
+    fn distance_till_z<'a>(&'a self, mut start: &'a Node) -> i32{
+        let mut count = 0;
+        while start[2] != b'Z' {
+            let (l, r) = &self.map[start];
+            if self.moves[count % self.n] {
+                start = r;
+            } else {
+                start = l;
+            }
+            count += 1;
+        }
+        count as i32
+    }
+
+    fn gcd(mut a: u64, mut b: u64) -> u64 {
+        while b != 0 {
+            let temp = b;
+            b = a % b;
+            a = temp;
+        }
+        a
+    }
+
+    fn lcm(arr: Vec<i32>) -> u64 {
+        let mut res: u64 = 1;
+        for i in arr {
+            res = (res * i as u64) / Day8::gcd(res, i as u64);
+        }
+        res
+    }
+
+    fn part_2(&self) -> u64 {
+        let distances:Vec<i32> = self.map.keys()
+            .filter_map(|x| {
+                if x[2] == b'A' {
+                    Some(self.distance_till_z(x))
+                } else {
+                    None
+                }
+            })
+            .collect();
+        Day8::lcm(distances)
+    }
 }
 
 
@@ -68,8 +114,15 @@ mod tests {
     use crate::day8::Day8;
 
     #[test]
-    fn test_input() {
+    fn test_part1() {
         let day = Day8::parse_input();
         assert_eq!(20777, day.part_1());
+    }
+
+    #[test]
+    fn test_part2() {
+        let day = Day8::parse_input();
+        let res = day.part_2();
+        assert_eq!(13289612809129, res);
     }
 }
