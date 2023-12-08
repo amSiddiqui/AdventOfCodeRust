@@ -144,7 +144,7 @@ impl Day7 {
 #[cfg(test)]
 mod test {
     use std::time::Instant;
-    use crate::day7::Day7;
+    use crate::year2023::day7::Day7;
 
     #[test]
     fn test_part1() {
