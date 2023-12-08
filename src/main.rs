@@ -1,5 +1,4 @@
-mod day7;
-mod day8;
+mod year2023;
 
 fn main() {
     println!("Hello, world!");
