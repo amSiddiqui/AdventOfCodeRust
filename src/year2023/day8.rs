@@ -111,7 +111,7 @@ impl Day8 {
 
 #[cfg(test)]
 mod tests {
-    use crate::day8::Day8;
+    use crate::year2023::day8::Day8;
 
     #[test]
     fn test_part1() {
