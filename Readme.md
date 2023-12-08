@@ -16,8 +16,10 @@ To run a solution, use the `cargo` command-line tool. The binary allows you to s
 cargo run -- --year <YEAR> --day <DAY> --part <PART>
 ```
 ### Example
+```
 cargo run -- --year 2023 --day 1 --part 1
 cargo run -- --help
+```
 
 ### Contributing
 While this is primarily a personal project for learning and fun, suggestions and improvements are welcome. Please feel free to open an issue or pull request.
