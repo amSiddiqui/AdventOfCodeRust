@@ -15,13 +15,23 @@ lazy_static! {
         }
         m
     };
+
+    static ref CARD_MAPPING_2: HashMap<char, usize> = {
+        let cards = "J23456789TQKA";
+        let mut m = HashMap::with_capacity(cards.len());
+        for (i, c) in cards.chars().enumerate() {
+            m.insert(c, i);
+        }
+        m
+    };
 }
 
 #[derive(Debug)]
 struct Hand {
     hand: String,
     bid: i32,
-    frequencies: Vec<usize>
+    frequencies: Vec<usize>,
+    joker: bool
 }
 
 impl Hand {
@@ -33,18 +43,48 @@ impl Hand {
         freq
     }
 
-    fn new(line: &str) -> Hand {
+    fn largest_key(map: &HashMap<char, usize>) -> Option<&char> {
+        let mut map_keys = map.keys().filter(|x| **x != 'J');
+        if let Some(key) = map_keys.next() {
+            let mut large = key;
+            for k in map_keys {
+                if map.get(k).unwrap() > map.get(large).unwrap() {
+                    large = k;
+                }
+            }
+            Some(large)
+        } else {
+            None
+        }
+
+    }
+
+    fn new(line: &str, joker: bool) -> Hand {
         let parts: Vec<&str> = line.split_whitespace().collect();
         assert_eq!(parts.len(), 2, "Each line should have 2 part");
-        let mut f: Vec<usize> = Hand::get_frequencies(parts[0])
+        let mut freq_map = Hand::get_frequencies(parts[0]);
+        if joker {
+            if let Some(&joker_val) = freq_map.get(&'J') {
+                if let Some(k) = Hand::largest_key(&freq_map) {
+                    freq_map.entry(*k)
+                        .and_modify(|x| *x += joker_val);
+                }
+                freq_map.remove(&'J');
+            }
+        }
+        let mut f: Vec<usize> = freq_map
             .into_values()
             .collect();
         f.sort();
         f.reverse();
+        if f.is_empty() {
+            f.push(5);
+        }
         Hand {
             hand: parts[0].to_string(),
             bid: parts[1].parse::<i32>().unwrap_or(0),
-            frequencies: f
+            frequencies: f,
+            joker
         }
     }
 
@@ -91,11 +131,19 @@ impl Ord for Hand {
         if score_self == score_other {
             for (a, b) in zip(self.hand.chars(), other.hand.chars()) {
                 if a != b {
-                    let val_a = CARD_MAPPING.get(&a)
-                        .unwrap_or_else(|| panic!("Key {} not found", &a));
-                    let val_b = CARD_MAPPING.get(&b)
-                        .unwrap_or_else(|| panic!("Key {} not found", &a));
-                    return val_a.cmp(val_b);
+                    return if self.joker {
+                        let val_a = CARD_MAPPING_2.get(&a)
+                            .unwrap_or_else(|| panic!("Key {} not found", &a));
+                        let val_b = CARD_MAPPING_2.get(&b)
+                            .unwrap_or_else(|| panic!("Key {} not found", &a));
+                        val_a.cmp(val_b)
+                    } else {
+                        let val_a = CARD_MAPPING.get(&a)
+                            .unwrap_or_else(|| panic!("Key {} not found", &a));
+                        let val_b = CARD_MAPPING.get(&b)
+                            .unwrap_or_else(|| panic!("Key {} not found", &a));
+                        val_a.cmp(val_b)
+                    }
                 }
             }
             Ordering::Equal
@@ -107,13 +155,13 @@ impl Ord for Hand {
 
 
 pub struct Day7 {
-    input: Vec<Hand>
+    input: String
 }
 
 impl Day7 {
     pub fn new() -> Self {
         Day7 {
-            input: Day7::parse_input()
+            input: Day7::get_input()
         }
     }
 
@@ -122,10 +170,10 @@ impl Day7 {
         fs::read_to_string(data_path).unwrap_or_default()
     }
 
-    fn parse_input() -> Vec<Hand>{
-        let mut data: Vec<Hand> = Day7::get_input()
+    fn parse_input(&self, joker:bool) -> Vec<Hand>{
+        let mut data: Vec<Hand> = self.input
             .split('\n')
-            .map(Hand::new).collect();
+            .map(|x| Hand::new(x, joker)).collect();
 
         assert_eq!(data.len(), 1000, "Input should have 1000 lines");
         data.sort();
@@ -136,13 +184,34 @@ impl Day7 {
 impl Day for Day7 {
     fn part_1(&self) -> u64 {
         let mut sum: u64 = 0;
-        for (i, s) in self.input.iter().enumerate() {
+        let data = self.parse_input(false);
+        for (i, s) in data.iter().enumerate() {
             sum += (i as u64 + 1) * s.bid as u64;
         }
         sum
     }
 
     fn part_2(&self) -> u64 {
-        0
+        let mut sum: u64 = 0;
+        let data = self.parse_input(true);
+        for (i, s) in data.iter().enumerate() {
+            sum += (i as u64 + 1) * s.bid as u64;
+        }
+        sum
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use crate::year2023::day7::Hand;
+
+    #[test]
+    fn test_largest_key() {
+        let hand = "HHDDUUUUI";
+        let freq_map = Hand::get_frequencies(hand);
+        let largest_key = Hand::largest_key(&freq_map).unwrap_or(&' ');
+        assert_eq!(*largest_key, 'U');
+    }
+}
+
