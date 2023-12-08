@@ -2,7 +2,7 @@ mod year2023;
 mod traits;
 
 use clap::Parser;
-use year2023::{day8, day7};
+use year2023::{day8, day7, day6};
 use crate::traits::Day;
 use std::time::Instant;
 
@@ -47,7 +47,11 @@ fn main() {
         } else if args.day == 8 {
             let day = day8::Day8::new();
             run_part(day, args.part);
-        } else {
+        } else if args.day == 6 {
+            let day = day6::Day6::new();
+            run_part(day, args.part);
+        }
+        else {
             println!("Solution for day {} and year {} is not implemented yet", args.day, args.year);
         }
     } else {
