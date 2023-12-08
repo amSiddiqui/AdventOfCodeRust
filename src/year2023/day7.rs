@@ -3,6 +3,7 @@ use std::fs;
 use std::collections::HashMap;
 use std::iter::zip;
 use lazy_static::lazy_static;
+use crate::traits::Day;
 
 
 lazy_static! {
@@ -105,12 +106,12 @@ impl Ord for Hand {
 }
 
 
-struct Day7 {
+pub struct Day7 {
     input: Vec<Hand>
 }
 
 impl Day7 {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Day7 {
             input: Day7::parse_input()
         }
@@ -122,21 +123,27 @@ impl Day7 {
     }
 
     fn parse_input() -> Vec<Hand>{
-        let data: Vec<Hand> = Day7::get_input()
+        let mut data: Vec<Hand> = Day7::get_input()
             .split('\n')
             .map(Hand::new).collect();
 
         assert_eq!(data.len(), 1000);
+        data.sort();
         data
     }
+}
 
-    fn part1(&mut self) -> u64 {
-        self.input.sort();
+impl Day for Day7 {
+    fn part_1(&self) -> u64 {
         let mut sum: u64 = 0;
         for (i, s) in self.input.iter().enumerate() {
-           sum += (i as u64 + 1) * s.bid as u64;
+            sum += (i as u64 + 1) * s.bid as u64;
         }
         sum
+    }
+
+    fn part_2(&self) -> u64 {
+        0
     }
 }
 
