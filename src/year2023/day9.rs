@@ -37,23 +37,23 @@ impl Day9 {
     }
 
     fn get_sequence_first(seq: &Vec<i32>) -> i32 {
-        let mut states: Vec<Vec<i32>> = vec![seq.clone()];
+        let mut states: Vec<i32> = vec![seq[0]];
         let mut curr_seq = seq.clone();
         while curr_seq.len() > 1 && curr_seq.iter().any(|x| *x != 0) {
             let mut next_seq = Vec::new();
             for i in 0..curr_seq.len() - 1 {
                 next_seq.push(curr_seq[i + 1] - curr_seq[i]);
             }
-            states.push(next_seq.clone());
+            states.push(next_seq[0]);
             curr_seq = next_seq;
         }
         let n = states.len();
-        states[n - 1].insert(0, 0);
+        states.push(0);
         for i in (1..n).rev() {
-            let res = states[i-1][0] - states[i][0];
-            states[i-1].insert(0, res);
+            let res = states[i-1] - states[i];
+            states[i-1] = res;
         }
-        states[0][0]
+        states[0]
     }
 }
 
