@@ -1,5 +1,7 @@
 use std::fs;
 use crate::traits::Day;
+use rayon::prelude::*;
+use std::time::Instant;
 
 pub struct Day9 {
     sequences: Vec<Vec<i32>>
@@ -59,18 +61,16 @@ impl Day9 {
 
 impl Day for Day9 {
     fn part_1(&self) -> u64 {
-        let mut res = 0;
-        for seq in &self.sequences {
-            res += Day9::get_sequence_last(seq)
-        }
+        let res: i32 = self.sequences.par_iter()
+            .map(Day9::get_sequence_last)
+            .sum();
         res as u64
     }
 
     fn part_2(&self) -> u64 {
-        let mut res = 0;
-        for seq in &self.sequences {
-            res += Day9::get_sequence_first(seq);
-        }
+        let res: i32 = self.sequences.par_iter()
+            .map(Day9::get_sequence_first)
+            .sum();
         res as u64
     }
 }
