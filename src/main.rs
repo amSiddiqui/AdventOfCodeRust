@@ -5,6 +5,7 @@ use clap::Parser;
 use year2023::{day8, day7, day6};
 use crate::traits::Day;
 use std::time::Instant;
+use crate::year2023::day9;
 
 const VALID_YEARS: [u32; 1] = [2023];
 
@@ -50,8 +51,10 @@ fn main() {
         } else if args.day == 6 {
             let day = day6::Day6::new();
             run_part(day, args.part);
-        }
-        else {
+        } else if args.day == 9 {
+            let day = day9::Day9::new();
+            run_part(day, args.part);
+        } else {
             println!("Solution for day {} and year {} is not implemented yet", args.day, args.year);
         }
     } else {
