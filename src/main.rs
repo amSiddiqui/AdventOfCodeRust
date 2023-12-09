@@ -37,19 +37,19 @@ fn main() {
         panic!("Valid days should be between 1 to 25");
     }
 
-    if  args.part > 2 {
+    if args.part > 2 {
         panic!("Valid part can only be 1 or 2");
     }
 
     if args.year == 2023 {
-        if args.day == 7 {
+        if args.day == 6 {
+            let day = day6::Day6::new();
+            run_part(day, args.part);
+        } else if args.day == 7 {
             let day = day7::Day7::new();
             run_part(day, args.part);
         } else if args.day == 8 {
             let day = day8::Day8::new();
-            run_part(day, args.part);
-        } else if args.day == 6 {
-            let day = day6::Day6::new();
             run_part(day, args.part);
         } else if args.day == 9 {
             let day = day9::Day9::new();
