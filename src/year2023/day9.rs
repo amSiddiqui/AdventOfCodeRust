@@ -1,7 +1,6 @@
 use std::fs;
 use crate::traits::Day;
 use rayon::prelude::*;
-use std::time::Instant;
 
 pub struct Day9 {
     sequences: Vec<Vec<i32>>
