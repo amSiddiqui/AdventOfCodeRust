@@ -1,7 +1,8 @@
 use std::collections::{HashMap, HashSet};
 use std::fs;
-use itertools::iproduct;
+use std::hash::Hash;
 use crate::traits::Day;
+use itertools::iproduct;
 use rayon::prelude::*;
 
 #[derive(PartialEq, Eq)]
@@ -9,41 +10,41 @@ enum Direction {
     North,
     East,
     South,
-    West
+    West,
 }
 
 #[derive(PartialEq, Eq, Hash, Copy, Clone, Debug)]
 struct Point {
     x: usize,
-    y: usize
+    y: usize,
 }
 
 impl Point {
     fn south_move(&self) -> Self {
         Point {
             x: self.x + 1,
-            y: self.y
+            y: self.y,
         }
     }
 
     fn north_move(&self) -> Self {
         Point {
             x: self.x - 1,
-            y: self.y
+            y: self.y,
         }
     }
 
     fn east_move(&self) -> Self {
         Point {
             x: self.x,
-            y: self.y + 1
+            y: self.y + 1,
         }
     }
 
     fn west_move(&self) -> Self {
         Point {
             x: self.x,
-            y: self.y - 1
+            y: self.y - 1,
         }
     }
 }
@@ -64,7 +65,8 @@ impl Edge {
         }
 
         Edge {
-            start, end
+            start,
+            end,
         }
     }
 
@@ -78,7 +80,7 @@ pub struct Day10 {
     lines: Vec<String>,
     possible_moves: HashMap<char, (Direction, Direction)>,
     x_limit: usize,
-    y_limit: usize
+    y_limit: usize,
 }
 
 
@@ -97,7 +99,7 @@ impl Day10 {
             lines,
             possible_moves: Day10::get_possible_moves(),
             x_limit,
-            y_limit
+            y_limit,
         }
     }
 
@@ -105,13 +107,13 @@ impl Day10 {
         match direction {
             Direction::North => {
                 "|F7S".find(tile).is_some()
-            },
+            }
             Direction::South => {
                 "|LJS".find(tile).is_some()
-            },
+            }
             Direction::East => {
                 "-J7S".find(tile).is_some()
-            },
+            }
             Direction::West => {
                 "-FLS".find(tile).is_some()
             }
@@ -169,7 +171,7 @@ impl Day10 {
                             start = Direction::North;
                             should_move = true;
                         }
-                    },
+                    }
                     Direction::North => {
                         if c_point.x > 0
                             && Day10::can_move(self.get_tile(c_point.north_move()),
@@ -180,7 +182,7 @@ impl Day10 {
                             start = Direction::South;
                             should_move = true;
                         }
-                    },
+                    }
                     Direction::West => {
                         if c_point.y > 0
                             && Day10::can_move(self.get_tile(c_point.west_move()),
@@ -191,7 +193,7 @@ impl Day10 {
                             start = Direction::East;
                             should_move = true;
                         }
-                    },
+                    }
                     Direction::East => {
                         if c_point.y < self.y_limit
                             && Day10::can_move(self.get_tile(c_point.east_move()),
@@ -218,17 +220,13 @@ impl Day10 {
         (visited, edges)
     }
 
-    fn check_point_inside_path(&self, point: Point, edges: &Vec<Edge>) -> bool {
+    fn check_point_inside_path(&self, point: Point, edges: &HashSet<Point>) -> bool {
         // Cast a ray from point to right edge
-        // TODO: A lot of scope of optimization here
         let mut intersection = 0;
-        for y in point.y+1..self.y_limit {
+        for y in point.y + 1..self.y_limit {
             let next_point = Point { x: point.x, y };
-            for edge in edges {
-                if edge.start == next_point {
-                    intersection += 1;
-                    break;
-                }
+            if edges.contains(&next_point) {
+                intersection += 1;
             }
         }
         intersection % 2 == 1
@@ -273,12 +271,13 @@ impl Day for Day10 {
         let mut edges = edges.into_iter().filter(|x| x.is_vertical()).collect::<Vec<_>>();
         path.insert(starting_location);
         edges.push(Edge::new(starting_location, south_start));
-        let all_points = iproduct!(0..self.x_limit, 0..self.y_limit);
-        all_points
+        let edges_start = edges.iter().map(|x| x.start).collect::<HashSet<_>>();
+        let points = iproduct!(0..self.x_limit, 0..self.y_limit);
+        points
             .par_bridge()
             .filter(|&(x, y)| {
                 let point = Point { x, y };
-                !path.contains(&point) && self.check_point_inside_path(point, &edges)
+                !path.contains(&point) && self.check_point_inside_path(point, &edges_start)
             }).count() as u64
     }
 }
