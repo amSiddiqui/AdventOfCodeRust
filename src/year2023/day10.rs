@@ -1,6 +1,8 @@
 use std::collections::{HashMap, HashSet};
 use std::fs;
+use itertools::iproduct;
 use crate::traits::Day;
+use rayon::prelude::*;
 
 #[derive(PartialEq, Eq)]
 enum Direction {
@@ -218,6 +220,7 @@ impl Day10 {
 
     fn check_point_inside_path(&self, point: Point, edges: &Vec<Edge>) -> bool {
         // Cast a ray from point to right edge
+        // TODO: A lot of scope of optimization here
         let mut intersection = 0;
         for y in point.y+1..self.y_limit {
             let next_point = Point { x: point.x, y };
@@ -270,20 +273,13 @@ impl Day for Day10 {
         let mut edges = edges.into_iter().filter(|x| x.is_vertical()).collect::<Vec<_>>();
         path.insert(starting_location);
         edges.push(Edge::new(starting_location, south_start));
-        let mut count = 0;
-        for x in 0..self.x_limit {
-            for y in 0..self.y_limit {
+        let all_points = iproduct!(0..self.x_limit, 0..self.y_limit);
+        all_points
+            .par_bridge()
+            .filter(|&(x, y)| {
                 let point = Point { x, y };
-                if path.contains(&point) {
-                    continue;
-                }
-                if self.check_point_inside_path(point, &edges) {
-                    count += 1;
-                }
-            }
-        }
-
-        count
+                !path.contains(&point) && self.check_point_inside_path(point, &edges)
+            }).count() as u64
     }
 }
 
