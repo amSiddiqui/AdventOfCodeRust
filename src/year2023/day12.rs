@@ -27,13 +27,10 @@ impl Day12 {
 
 
     fn traverse_tree(line: &str, nums: &Vec<usize>) -> u64{
-        // println!("{} ;; {:?}", line, nums);
         if line.is_empty() {
             return if nums.is_empty() {
-                // println!("Returning 1 1");
                 1
             } else {
-                // println!("Returning 2 0");
                 0
             }
         }
@@ -55,16 +52,13 @@ impl Day12 {
             Some('#') => {
                 match line.chars().nth(nums[0]) {
                     Some('#') => {
-                        // println!("Returning 3 0");
                         0
                     },
                     _ => {
                         if line.len() < nums[0] {
-                            // println!("Returning 6 0");
                             return 0;
                         }
                         if line[0..nums[0]].contains('.') {
-                            // println!("Returning 4 0");
                             return 0;
                         }
                         if line.len() == nums[0] {
