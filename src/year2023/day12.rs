@@ -1,4 +1,6 @@
+use std::collections::HashMap;
 use std::fs;
+use std::sync::{Arc, Mutex};
 use crate::traits::Day;
 use rayon::prelude::*;
 
@@ -26,66 +28,78 @@ impl Day12 {
     }
 
 
-    fn traverse_tree(line: &str, nums: &Vec<usize>) -> u64{
+    fn traverse_tree(line: &str,
+                     nums: &[usize],
+                     cache: Arc<Mutex<HashMap<(String, Vec<usize>), u64>>>) -> u64{
+        let cache_lock = cache.lock().unwrap();
+        if let Some(&res) = cache_lock.get(&(line.to_string(), nums.to_vec())) {
+            return res;
+        }
+        drop(cache_lock);
+        let result =
         if line.is_empty() {
-            return if nums.is_empty() {
+            if nums.is_empty() {
                 1
             } else {
                 0
             }
         }
-        if nums.is_empty() {
-            return if line.contains('#') {
+        else if nums.is_empty() {
+            if line.contains('#') {
                 0
             } else {
                 1
-            };
-        }
-        match line.chars().nth(0) {
-            Some('.') => {
-                Day12::traverse_tree(&line[1..], nums)
-            },
-            Some('?') => {
-                Day12::traverse_tree(&format!("#{}", &line[1..]), nums)
-                    + Day12::traverse_tree(&line[1..], nums)
-            },
-            Some('#') => {
-                match line.chars().nth(nums[0]) {
-                    Some('#') => {
-                        0
-                    },
-                    _ => {
-                        if line.len() < nums[0] {
-                            return 0;
-                        }
-                        if line[0..nums[0]].contains('.') {
-                            return 0;
-                        }
-                        if line.len() == nums[0] {
-                            Day12::traverse_tree("", &nums[1..].to_vec())
-                        } else {
-                            Day12::traverse_tree(&line[nums[0]+1..], &nums[1..].to_vec())
+            }
+        } else {
+            match line.chars().nth(0) {
+                Some('.') => {
+                    Day12::traverse_tree(&line[1..], nums, Arc::clone(&cache))
+                },
+                Some('?') => {
+                    Day12::traverse_tree(&format!("#{}", &line[1..]), nums, Arc::clone(&cache))
+                        + Day12::traverse_tree(&line[1..], nums, Arc::clone(&cache))
+                },
+                Some('#') => {
+                    match line.chars().nth(nums[0]) {
+                        Some('#') => {
+                            0
+                        },
+                        _ => {
+                            if line.len() < nums[0] || line[0..nums[0]].contains('.') {
+                                0
+                            } else if line.len() == nums[0] {
+                                Day12::traverse_tree("", &nums[1..], Arc::clone(&cache))
+                            } else {
+                                Day12::traverse_tree(&line[nums[0]+1..], &nums[1..], Arc::clone(&cache))
+                            }
                         }
                     }
+                },
+                _ => {
+                    panic!("Unknown character or empty line in {line}");
                 }
-            },
-            _ => {
-                panic!("Unknown character or empty line in {line}");
             }
-        }
+        };
+
+        let mut cache_lock = cache.lock().unwrap();
+        cache_lock.insert((line.to_string(), nums.to_vec()), result);
+        result
     }
 }
 
 impl Day for Day12 {
     fn part_1(&self) -> u64 {
+        let cache = Arc::new(Mutex::new(HashMap::new()));
         let res: u64 = self.lines.par_iter()
             .map(|(line, nums)| {
-                Day12::traverse_tree(line, nums)
+                let cache_clone = Arc::clone(&cache);
+                Day12::traverse_tree(line, nums, cache_clone)
             }).sum();
         res
     }
 
     fn part_2(&self) -> u64 {
+        let cache = Arc::new(Mutex::new(HashMap::new()));
         let res: u64 = self.lines.par_iter()
             .map(|(line, nums)| {
                 let repeated_num = nums.iter()
@@ -97,7 +111,8 @@ impl Day for Day12 {
                     .take(5)
                     .collect::<Vec<_>>()
                     .join("?");
-                Day12::traverse_tree(&repeated_str, &repeated_num)
+                let cache_clone = Arc::clone(&cache);
+                Day12::traverse_tree(&repeated_str, &repeated_num, cache_clone)
             }).sum();
         res
     }
