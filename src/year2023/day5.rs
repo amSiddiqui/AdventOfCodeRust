@@ -75,6 +75,8 @@ impl Day for Day5 {
     }
 
     fn part_2(&self) -> u64 {
+        println!("Go grab a coffee. We are going to be here for a while. 😅");
+        println!("Your CPU goes brrrrr....");
         let seeds:Vec<_> = self.seeds.chunks(2)
             .map(|chunk| (chunk[0], chunk[1]))
             .collect();
