@@ -14,10 +14,7 @@ enum Direction {
 
 impl Direction {
     fn is_horizontal(&self) -> bool {
-        match self {
-            Direction::East | Direction::West => true,
-            _ => false
-        }
+        matches!(self, Direction::East | Direction::West)
     }
 }
 
