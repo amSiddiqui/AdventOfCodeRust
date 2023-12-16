@@ -1,5 +1,5 @@
 use std::fs;
-use std::collections::{HashSet};
+use std::collections::HashSet;
 use crate::traits::Day;
 
 pub struct Day11 {

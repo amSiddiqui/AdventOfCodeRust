@@ -4,7 +4,7 @@ mod traits;
 use clap::Parser;
 use year2023::{day8, day7, day6};
 use crate::traits::Day;
-use std::time::Instant;
+use std::{time::Instant, collections::HashMap};
 use crate::year2023::{day1, day10, day11, day12, day13, day2, day3, day4, day5, day9};
 
 const VALID_YEARS: [u32; 1] = [2023];
@@ -42,58 +42,32 @@ fn main() {
     }
 
     if args.year == 2023 {
-        if args.day == 1 {
-            let day = day1::Day1::new();
-            run_part(day, args.part);
-        } else if args.day == 2 {
-            let day = day2::Day2::new();
-            run_part(day, args.part);
-        } else if args.day == 3 {
-            let day = day3::Day3::new();
-            run_part(day, args.part);
-        } else if args.day == 4 {
-            let day = day4::Day4::new();
-            run_part(day, args.part);
-        } else if args.day == 5 {
-            let day = day5::Day5::new();
-            if args.part == 2 {
-                println!("Go grab a coffee. We are going to be here for a while. 😅");
-                println!("Your CPU goes brrrrr....");
-            }
-            run_part(day, args.part);
-        } else if args.day == 6 {
-            let day = day6::Day6::new();
-            run_part(day, args.part);
-        } else if args.day == 7 {
-            let day = day7::Day7::new();
-            run_part(day, args.part);
-        } else if args.day == 8 {
-            let day = day8::Day8::new();
-            run_part(day, args.part);
-        } else if args.day == 9 {
-            let day = day9::Day9::new();
-            run_part(day, args.part);
-        } else if args.day == 10 {
-            let day = day10::Day10::new();
-            run_part(day, args.part);
-        } else if args.day == 11 {
-            let day = day11::Day11::new();
-            run_part(day, args.part);
-        } else if args.day == 12 {
-            let day = day12::Day12::new();
-            run_part(day, args.part);
-        } else if args.day == 13 {
-            let day = day13::Day13::new();
+        let mut day_constructors: HashMap<u32, Box<dyn Fn() -> Box<dyn Day>>> = HashMap::new();
+        day_constructors.insert(1, Box::new(|| Box::new(day1::Day1::new()) as Box<dyn Day>));
+        day_constructors.insert(2, Box::new(|| Box::new(day2::Day2::new()) as Box<dyn Day>));
+        day_constructors.insert(3, Box::new(|| Box::new(day3::Day3::new()) as Box<dyn Day>));
+        day_constructors.insert(4, Box::new(|| Box::new(day4::Day4::new()) as Box<dyn Day>));
+        day_constructors.insert(5, Box::new(|| Box::new(day5::Day5::new()) as Box<dyn Day>));
+        day_constructors.insert(6, Box::new(|| Box::new(day6::Day6::new()) as Box<dyn Day>));
+        day_constructors.insert(7, Box::new(|| Box::new(day7::Day7::new()) as Box<dyn Day>));
+        day_constructors.insert(8, Box::new(|| Box::new(day8::Day8::new()) as Box<dyn Day>));
+        day_constructors.insert(9, Box::new(|| Box::new(day9::Day9::new()) as Box<dyn Day>));
+        day_constructors.insert(10, Box::new(|| Box::new(day10::Day10::new()) as Box<dyn Day>));
+        day_constructors.insert(11, Box::new(|| Box::new(day11::Day11::new()) as Box<dyn Day>));
+        day_constructors.insert(12, Box::new(|| Box::new(day12::Day12::new()) as Box<dyn Day>));
+        day_constructors.insert(13, Box::new(|| Box::new(day13::Day13::new()) as Box<dyn Day>));
+        if let Some(constructor) = day_constructors.get(&args.day) {
+            let day = constructor();
             run_part(day, args.part);
         } else {
             println!("Solution for day {} and year {} is not implemented yet", args.day, args.year);
-        }
+        }        
     } else {
         println!("Solution for year {} is not implemented yet", args.year);
     }
 }
 
-fn run_part<T: Day>(day: T, part: u32) {
+fn run_part(day: Box<dyn Day>, part: u32) {
     if part == 1 || part == 0 {
         let start = Instant::now();
         let s1 = day.part_1();
