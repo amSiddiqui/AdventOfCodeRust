@@ -125,7 +125,10 @@ impl Day17 {
                     continue;
                 }
                 end_node = Some(node);
-                break;
+                if min_step_limit == 0 {
+                    break;
+                }
+                continue;
             }
             if visited.contains(&node) {
                 continue;
@@ -268,6 +271,6 @@ impl Day for Day17 {
     }
 
     fn part_2(&self) -> u64 {
-        self.dijkstra_shortest_path(10, 4)
+        self.dijkstra_shortest_path(11, 4)
     }
 }
