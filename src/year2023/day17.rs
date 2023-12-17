@@ -61,6 +61,8 @@ struct Node {
 impl Hash for Node {
     fn hash<H: Hasher>(&self, state: &mut H) {
         self.location.hash(state);
+        self.direction.is_horizontal().hash(state);
+        self.count.hash(state);
     }
 }
 
@@ -125,10 +127,7 @@ impl Day17 {
                     continue;
                 }
                 end_node = Some(node);
-                if min_step_limit == 0 {
-                    break;
-                }
-                continue;
+                break;
             }
             if visited.contains(&node) {
                 continue;
@@ -271,6 +270,6 @@ impl Day for Day17 {
     }
 
     fn part_2(&self) -> u64 {
-        self.dijkstra_shortest_path(11, 4)
+        self.dijkstra_shortest_path(10, 4)
     }
 }
