@@ -4,7 +4,7 @@ use std::fs;
 use std::hash::{Hash, Hasher};
 use crate::traits::Day;
 
-#[derive(Eq, PartialEq, Debug, Clone, Hash)]
+#[derive(Eq, PartialEq, Debug, Clone, Hash, Copy)]
 enum Direction {
     South,
     North,
@@ -12,26 +12,7 @@ enum Direction {
     West
 }
 
-impl Direction {
-    fn repr(&self) -> String {
-        match self {
-            Direction::South => {
-                String::from("\x1b[31mv\x1b[0m")
-            }
-            Direction::North => {
-                String::from("\x1b[31m^\x1b[0m")
-            }
-            Direction::East => {
-                String::from("\x1b[31m>\x1b[0m")
-            }
-            Direction::West => {
-                String::from("\x1b[31m<\x1b[0m")
-            }
-        }
-    }
-}
-
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash, Copy)]
 struct Point {
     x: usize,
     y: usize
@@ -43,13 +24,12 @@ impl Point {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 struct Node {
     location: Point,
     weight: u32,
     direction: Direction,
-    count: u8,
-    previous: Option<Box<Node>>
+    count: u8
 }
 
 impl Hash for Node {
@@ -105,13 +85,12 @@ impl Day17 {
         let x_lim = self.graph.len();
         let y_lim = self.graph[0].len();
         let end_location = Point::new(x_lim - 1, y_lim - 1);
-        let mut visited:HashSet<Node> = HashSet::new();
+        let mut visited:HashSet<(Point, Direction, u8)> = HashSet::new();
         let start_node = Node {
             location: Point::new(0, 0),
             weight: 0,
             direction: Direction::East,
-            count: 0,
-            previous: None
+            count: 0
         };
         heap.push(start_node);
         let mut end_node = None;
@@ -123,7 +102,7 @@ impl Day17 {
                 end_node = Some(node);
                 break;
             }
-            if visited.contains(&node) {
+            if visited.contains(&(node.location, node.direction, node.count)) {
                 continue;
             }
             // east
@@ -135,7 +114,6 @@ impl Day17 {
                             weight: node.weight + self.graph[node.location.x][node.location.y+1],
                             direction: Direction::East,
                             count: node.count + 1,
-                            previous: Some(Box::new(node.clone()))
                         };
                         heap.push(next_node);
                     }
@@ -144,8 +122,7 @@ impl Day17 {
                         location: Point::new(node.location.x, node.location.y+1),
                         weight: node.weight + self.graph[node.location.x][node.location.y+1],
                         direction: Direction::East,
-                        count: 1,
-                        previous: Some(Box::new(node.clone()))
+                        count: 1
                     };
                     heap.push(next_node);
                 }
@@ -158,8 +135,7 @@ impl Day17 {
                             location: Point::new(node.location.x, node.location.y-1),
                             weight: node.weight + self.graph[node.location.x][node.location.y-1],
                             direction: Direction::West,
-                            count: node.count + 1,
-                            previous: Some(Box::new(node.clone()))
+                            count: node.count + 1
                         };
                         heap.push(next_node);
                     }
@@ -168,8 +144,7 @@ impl Day17 {
                         location: Point::new(node.location.x, node.location.y-1),
                         weight: node.weight + self.graph[node.location.x][node.location.y-1],
                         direction: Direction::West,
-                        count: 1,
-                        previous: Some(Box::new(node.clone()))
+                        count: 1
                     };
                     heap.push(next_node);
                 }
@@ -182,8 +157,7 @@ impl Day17 {
                             location: Point::new(node.location.x-1, node.location.y),
                             weight: node.weight + self.graph[node.location.x-1][node.location.y],
                             direction: Direction::North,
-                            count: node.count+1,
-                            previous: Some(Box::new(node.clone()))
+                            count: node.count+1
                         };
                         heap.push(next_node);
                     }
@@ -192,8 +166,7 @@ impl Day17 {
                         location: Point::new(node.location.x-1, node.location.y),
                         weight: node.weight + self.graph[node.location.x-1][node.location.y],
                         direction: Direction::North,
-                        count: 1,
-                        previous: Some(Box::new(node.clone()))
+                        count: 1
                     };
                     heap.push(next_node);
                 }
@@ -206,8 +179,7 @@ impl Day17 {
                             location: Point::new(node.location.x+1, node.location.y),
                             weight: node.weight + self.graph[node.location.x+1][node.location.y],
                             direction: Direction::South,
-                            count: node.count+1,
-                            previous: Some(Box::new(node.clone()))
+                            count: node.count+1
                         };
                         heap.push(next_node);
                     }
@@ -216,40 +188,16 @@ impl Day17 {
                         location: Point::new(node.location.x+1, node.location.y),
                         weight: node.weight + self.graph[node.location.x+1][node.location.y],
                         direction: Direction::South,
-                        count: 1,
-                        previous: Some(Box::new(node.clone()))
+                        count: 1
                     };
                     heap.push(next_node);
                 }
             }
-            visited.insert(node);
+            visited.insert((node.location, node.direction, node.count));
         }
         drop(visited);
 
         if let Some(node) = end_node {
-            let mut data = self.graph
-                .iter()
-                .map(|row| row
-                    .iter()
-                    .map(|val| val.to_string())
-                    .collect::<Vec<_>>()
-                ).collect::<Vec<_>>();
-            let mut curr: &Node = &node;
-            data[curr.location.x][curr.location.y] = curr.direction.repr();
-            while let Some(ref prev) = curr.previous {
-                if !(prev.location.x == 0 && prev.location.y == 0) {
-                    data[prev.location.x][prev.location.y] = prev.direction.repr();
-                }
-                curr = prev;
-            }
-
-            for x in data {
-                for y in x {
-                    print!("{y}");
-                }
-                println!();
-            }
-
             node.weight as u64
         } else {
             panic!("Cannot reach end in the provided graph");
