@@ -234,12 +234,11 @@ impl Day17 {
                     .map(|val| val.to_string())
                     .collect::<Vec<_>>()
                 ).collect::<Vec<_>>();
-            let mut curr = &Box::new(node.clone());
+            let mut curr: &Node = &node;
             data[curr.location.x][curr.location.y] = curr.direction.repr();
-            while let Some(prev) = &curr.previous {
-                let dir = &prev.direction;
+            while let Some(ref prev) = curr.previous {
                 if !(prev.location.x == 0 && prev.location.y == 0) {
-                    data[prev.location.x][prev.location.y] = dir.repr();
+                    data[prev.location.x][prev.location.y] = prev.direction.repr();
                 }
                 curr = prev;
             }
