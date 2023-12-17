@@ -4,18 +4,12 @@ use std::fs;
 use std::hash::{Hash, Hasher};
 use crate::traits::Day;
 
-#[derive(Eq, PartialEq, Debug, Clone)]
+#[derive(Eq, PartialEq, Debug, Clone, Hash)]
 enum Direction {
     South,
     North,
     East,
     West
-}
-
-impl Direction {
-    fn is_horizontal(&self) -> bool {
-        matches!(self, Direction::West | Direction::East)
-    }
 }
 
 impl Direction {
@@ -61,14 +55,14 @@ struct Node {
 impl Hash for Node {
     fn hash<H: Hasher>(&self, state: &mut H) {
         self.location.hash(state);
-        self.direction.is_horizontal().hash(state);
+        self.direction.hash(state);
         self.count.hash(state);
     }
 }
 
 impl PartialEq<Self> for Node {
     fn eq(&self, other: &Self) -> bool {
-        self.location == other.location && self.direction.is_horizontal() == other.direction.is_horizontal() && self.count == other.count
+        self.location == other.location && self.direction == other.direction && self.count == other.count
     }
 }
 
@@ -230,7 +224,7 @@ impl Day17 {
             }
             visited.insert(node);
         }
-
+        drop(visited);
 
         if let Some(node) = end_node {
             let mut data = self.graph
