@@ -19,12 +19,12 @@ To run a solution, use the `cargo` command-line tool. The binary allows you to s
 ### Usage
 
 ```bash
-cargo run -- --year <YEAR> --day <DAY> --part <PART>
+cargo run --release -- --year <YEAR> --day <DAY> --part <PART>
 ```
 ### Example
 ```
-cargo run -- --year 2023 --day 1 --part 1
-cargo run -- --help
+cargo run --release -- --year 2023 --day 1 --part 1
+cargo run --release -- --help
 ```
 
 ### Contributing
