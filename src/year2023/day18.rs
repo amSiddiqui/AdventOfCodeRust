@@ -175,17 +175,15 @@ impl Day for Day18 {
             }
         }
         let mut sum = 0_u64;
-        let mut count = 0_u64;
         for (_, y) in vertical_edges.iter_mut() {
             y.sort();
-            count += y.len() as u64 / 2;
             for chunk in y.chunks(2) {
                 if chunk.len() != 2 {
                     panic!("Uneven pairs of coordinates");
                 }
-                sum += (chunk[1] - chunk[0]) as u64;
+                sum += (chunk[1] - chunk[0] + 1) as u64;
             }
         }
-        sum + left_edge_sum + count + 1
+        sum + left_edge_sum + 1
     }
 }
