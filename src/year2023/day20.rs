@@ -1,6 +1,7 @@
 use std::collections::{HashMap, VecDeque};
 use std::fs;
 use crate::traits::Day;
+use crate::year2023::day8::Day8;
 
 pub struct Day20 {
     mapping: HashMap<String, Vec<String>>,
@@ -63,60 +64,98 @@ impl Day20 {
         }
     }
 
-    fn process_state(&mut self) -> bool {
+    fn reset_state(&mut self) {
+        self.states.iter_mut().for_each(|(_, v)| {
+            v.ff = false;
+            if let Some(con) = &mut v.con {
+                con.values_mut().for_each(|x| {
+                    *x = false;
+                });
+            }
+        });
+    }
+
+    fn get_neg_pos_count(&mut self) -> (i32, i32) {
         let mut queue:VecDeque<(String, bool, String)> = VecDeque::new();
         let low_sigs = self.mapping.get("broadcaster").unwrap();
         for sig in low_sigs {
             queue.push_back((String::from("broadcaster"), false, sig.clone()));
         }
-        let mut found = false;
+        let mut neg = 0;
+        let mut pos = 0;
         while let Some((f_node, pulse, node)) = queue.pop_front() {
-            if &node == "rx" && !pulse {
-                found = true;
-                break;
+            if pulse {
+                pos += 1;
+            } else {
+                neg += 1;
             }
+            self.update_states(&mut queue, f_node, pulse, &node);
+        }
+        (pos, neg + 1)
+    }
 
-            if let Some(state) = self.states.get_mut(&node) {
-                if let Some(con) = &mut state.con {
-                    con.insert(f_node, pulse);
-                    let new_pulse = !con.values().all(|x| *x);
-                    for i in self.mapping.get(&node).unwrap() {
-                        queue.push_back((node.clone(), new_pulse, i.clone()));
-                    }
-                } else if !pulse {
-                    let new_pulse = !state.ff;
-                    state.ff = new_pulse;
-                    for i in self.mapping.get(&node).unwrap() {
-                        queue.push_back((node.clone(), new_pulse, i.clone()));
-                    }
+    fn find_node(&mut self, needle: &str) -> bool {
+        let mut queue:VecDeque<(String, bool, String)> = VecDeque::new();
+        let low_sigs = self.mapping.get("broadcaster").unwrap();
+        for sig in low_sigs {
+            queue.push_back((String::from("broadcaster"), false, sig.clone()));
+        }
+        while let Some((f_node, pulse, node)) = queue.pop_front() {
+            if f_node == needle && pulse {
+                return true;
+            }
+            self.update_states(&mut queue, f_node, pulse, &node);
+        }
+
+        false
+    }
+
+    fn update_states(&mut self, queue: &mut VecDeque<(String, bool, String)>, f_node: String, pulse: bool, node: &String) {
+        if let Some(state) = self.states.get_mut(node) {
+            if let Some(con) = &mut state.con {
+                con.insert(f_node, pulse);
+                let new_pulse = !con.values().all(|x| *x);
+                for i in self.mapping.get(node).unwrap() {
+                    queue.push_back((node.clone(), new_pulse, i.clone()));
+                }
+            } else if !pulse {
+                let new_pulse = !state.ff;
+                state.ff = new_pulse;
+                for i in self.mapping.get(node).unwrap() {
+                    queue.push_back((node.clone(), new_pulse, i.clone()));
                 }
             }
-
         }
-        found
     }
 }
 
 impl Day for Day20 {
     fn part_1(&mut self) -> u64 {
-        // let mut p = 0_u64;
-        // let mut n = 0_u64;
-        // for _ in 0..1000 {
-        //     let (a, b, _) = self.process_state();
-        //     p += a as u64;
-        //     n += b as u64;
-        // }
-        0
+        self.reset_state();
+        let mut p = 0_u64;
+        let mut n = 0_u64;
+        for _ in 0..1000 {
+            let (a, b) = self.get_neg_pos_count();
+            p += a as u64;
+            n += b as u64;
+        }
+        p * n
     }
 
     fn part_2(&mut self) -> u64 {
-        let mut found = false;
-        let mut count = 0u64;
-        while !found {
-            found = self.process_state();
-            count += 1;
+        let nodes = ["tx", "dd", "nz", "ph"];
+        let mut vals: Vec<i32> = Vec::new();
+
+        for node in nodes {
+            self.reset_state();
+            let mut count = 1;
+            while !self.find_node(node) {
+                count += 1;
+            }
+            vals.push(count);
         }
-        count
+
+        Day8::lcm(vals)
     }
 }
 

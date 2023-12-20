@@ -64,7 +64,7 @@ impl Day8 {
         count as i32
     }
 
-    fn gcd(mut a: u64, mut b: u64) -> u64 {
+    pub fn gcd(mut a: u64, mut b: u64) -> u64 {
         while b != 0 {
             let temp = b;
             b = a % b;
@@ -73,7 +73,7 @@ impl Day8 {
         a
     }
 
-    fn lcm(arr: Vec<i32>) -> u64 {
+    pub fn lcm(arr: Vec<i32>) -> u64 {
         let mut res: u64 = 1;
         for i in arr {
             res = (res * i as u64) / Day8::gcd(res, i as u64);
