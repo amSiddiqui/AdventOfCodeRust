@@ -128,7 +128,7 @@ impl Day18 {
 }
 
 impl Day for Day18 {
-    fn part_1(&self) -> u64 {
+    fn part_1(&mut self) -> u64 {
         let (vertex, vertical_vertex, smallest, largest) = self.get_all_vertex_and_vertical_edge_start();
         let mut count = 0;
         println!("Smallest: {smallest:?} ;; Largest: {largest:?}");
@@ -144,7 +144,7 @@ impl Day for Day18 {
         count
     }
 
-    fn part_2(&self) -> u64 {
+    fn part_2(&mut self) -> u64 {
         let mut current = Point::new(0, 0);
         let mut vertical_edges: HashMap<i32, Vec<i32>> = HashMap::new();
         let mut left_edge_sum = 0_u64;

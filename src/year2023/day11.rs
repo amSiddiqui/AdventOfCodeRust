@@ -58,34 +58,22 @@ impl Day11 {
 }
 
 impl Day for Day11 {
-    fn part_1(&self) -> u64 {
+    fn part_1(&mut self) -> u64 {
         let mut new_positions: Vec<(u64, u64)> = Vec::new();
         for pos in &self.points {
-            let x = pos.0 as u64 + match self.empty_x.binary_search(&pos.0) {
-                Ok(inc) => inc,
-                Err(inc) =>  inc
-            } as u64;
-            let y = pos.1 as u64 + match self.empty_y.binary_search(&pos.1) {
-                Ok(inc) => inc,
-                Err(inc) =>  inc
-            } as u64;
+            let x = pos.0 as u64 + self.empty_x.binary_search(&pos.0).unwrap_or_else(|inc| inc) as u64;
+            let y = pos.1 as u64 + self.empty_y.binary_search(&pos.1).unwrap_or_else(|inc| inc) as u64;
             new_positions.push((x, y));
         }
 
         Day11::get_distance_sum(&new_positions)
     }
 
-    fn part_2(&self) -> u64 {
+    fn part_2(&mut self) -> u64 {
         let mut new_positions: Vec<(u64, u64)> = Vec::new();
         for pos in &self.points {
-            let x = pos.0 as u64 + (match self.empty_x.binary_search(&pos.0) {
-                Ok(inc) => inc,
-                Err(inc) =>  inc
-            } as u64) * (1_000_000_u64 - 1);
-            let y = pos.1 as u64 + (match self.empty_y.binary_search(&pos.1) {
-                Ok(inc) => inc,
-                Err(inc) =>  inc
-            } as u64) * (1_000_000_u64 - 1);
+            let x = pos.0 as u64 + (self.empty_x.binary_search(&pos.0).unwrap_or_else(|inc| inc) as u64) * (1_000_000_u64 - 1);
+            let y = pos.1 as u64 + (self.empty_y.binary_search(&pos.1).unwrap_or_else(|inc| inc) as u64) * (1_000_000_u64 - 1);
             new_positions.push((x, y));
         }
         Day11::get_distance_sum(&new_positions)

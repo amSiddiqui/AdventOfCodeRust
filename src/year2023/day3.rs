@@ -87,7 +87,7 @@ impl Day3 {
 }
 
 impl Day for Day3 {
-    fn part_1(&self) -> u64 {
+    fn part_1(&mut self) -> u64 {
         let res: u64 = self.lines.par_iter()
             .enumerate()
             .map(|(x, l)| {
@@ -104,7 +104,7 @@ impl Day for Day3 {
         res
     }
 
-    fn part_2(&self) -> u64 {
+    fn part_2(&mut self) -> u64 {
         let res: u64 = self.lines.par_iter()
             .enumerate()
             .map(|(x, line)| {

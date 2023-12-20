@@ -4,7 +4,7 @@ mod traits;
 use clap::Parser;
 use crate::traits::Day;
 use std::{time::Instant, collections::HashMap};
-use crate::year2023::{day1, day10, day11, day12, day13, day2, day3, day4, day5, day9, day14, day6, day7, day8, day15, day16, day17, day18, day19};
+use crate::year2023::{day1, day10, day11, day12, day13, day2, day3, day4, day5, day9, day14, day6, day7, day8, day15, day16, day17, day18, day19, day20};
 
 const VALID_YEARS: [u32; 1] = [2023];
 
@@ -61,6 +61,7 @@ fn main() {
         day_constructors.insert(17, Box::new(|| Box::new(day17::Day17::new()) as Box<dyn Day>));
         day_constructors.insert(18, Box::new(|| Box::new(day18::Day18::new()) as Box<dyn Day>));
         day_constructors.insert(19, Box::new(|| Box::new(day19::Day19::new()) as Box<dyn Day>));
+        day_constructors.insert(20, Box::new(|| Box::new(day20::Day20::new()) as Box<dyn Day>));
         if let Some(constructor) = day_constructors.get(&args.day) {
             let day = constructor();
             run_part(day, args.part);
@@ -72,7 +73,7 @@ fn main() {
     }
 }
 
-fn run_part(day: Box<dyn Day>, part: u32) {
+fn run_part(mut day: Box<dyn Day>, part: u32) {
     if part == 1 || part == 0 {
         let start = Instant::now();
         let s1 = day.part_1();

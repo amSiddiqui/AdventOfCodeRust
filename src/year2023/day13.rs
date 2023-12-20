@@ -73,14 +73,14 @@ impl Day13 {
 }
 
 impl Day for Day13 {
-    fn part_1(&self) -> u64 {
+    fn part_1(&mut self) -> u64 {
         let res = self.data.par_iter()
             .filter_map(Day13::find_reflection_index)
             .sum::<usize>();
         res as u64
     }
 
-    fn part_2(&self) -> u64 {
+    fn part_2(&mut self) -> u64 {
         let res = self.data.par_iter().map(|matrix| {
             let mut ans_count = HashMap::new();
             for (r, row) in matrix.iter().enumerate() {

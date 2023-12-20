@@ -45,7 +45,7 @@ impl Day4 {
 }
 
 impl Day for Day4 {
-    fn part_1(&self) -> u64 {
+    fn part_1(&mut self) -> u64 {
         self.lines
             .iter()
             .map(|&overlap| {
@@ -57,7 +57,7 @@ impl Day for Day4 {
             }).sum()
     }
 
-    fn part_2(&self) -> u64 {
+    fn part_2(&mut self) -> u64 {
         let n = self.lines.len();
         let mut card_count: HashMap<_, _> = (0..n).map(|key| (key as u64, 1_u64)).collect();
         self.lines.iter().enumerate().for_each(|(i, &val)| {

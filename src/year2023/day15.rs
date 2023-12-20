@@ -46,13 +46,13 @@ impl Day15 {
 }
 
 impl Day for Day15 {
-    fn part_1(&self) -> u64 {
+    fn part_1(&mut self) -> u64 {
         self.lens_str.iter()
             .map(|x| Day15::hash_fn(x.as_str()) as u64)
             .sum::<u64>()
     }
 
-    fn part_2(&self) -> u64 {
+    fn part_2(&mut self) -> u64 {
         let mut boxes: Vec<Vec<Lens>> = vec![Vec::new(); 256];
         self.lens_str
             .iter()

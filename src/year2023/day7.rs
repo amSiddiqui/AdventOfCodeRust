@@ -182,7 +182,7 @@ impl Day7 {
 }
 
 impl Day for Day7 {
-    fn part_1(&self) -> u64 {
+    fn part_1(&mut self) -> u64 {
         let mut sum: u64 = 0;
         let data = self.parse_input(false);
         for (i, s) in data.iter().enumerate() {
@@ -191,7 +191,7 @@ impl Day for Day7 {
         sum
     }
 
-    fn part_2(&self) -> u64 {
+    fn part_2(&mut self) -> u64 {
         let mut sum: u64 = 0;
         let data = self.parse_input(true);
         for (i, s) in data.iter().enumerate() {

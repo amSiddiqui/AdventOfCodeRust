@@ -69,12 +69,12 @@ impl Day5 {
 }
 
 impl Day for Day5 {
-    fn part_1(&self) -> u64 {
+    fn part_1(&mut self) -> u64 {
         let res = self.seeds.par_iter().map(|x| self.apply_map(*x)).min();
         res.unwrap_or(0)
     }
 
-    fn part_2(&self) -> u64 {
+    fn part_2(&mut self) -> u64 {
         println!("Go grab a coffee. We are going to be here for a while. 😅");
         println!("Your CPU goes brrrrr....");
         let seeds:Vec<_> = self.seeds.chunks(2)

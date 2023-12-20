@@ -38,7 +38,7 @@ impl Day6 {
 
 
 impl Day for Day6 {
-    fn part_1(&self) -> u64 {
+    fn part_1(&mut self) -> u64 {
         let time_num: Vec<i32> = self.time_str
             .split_whitespace()
             .map(|x| x.parse::<i32>()
@@ -64,7 +64,7 @@ impl Day for Day6 {
         res
     }
 
-    fn part_2(&self) -> u64 {
+    fn part_2(&mut self) -> u64 {
         let time_str = self.time_str.split_whitespace().collect::<String>();
         let distance_str = self.distance_str.split_whitespace().collect::<String>();
         let time_num = time_str.parse::<u64>()

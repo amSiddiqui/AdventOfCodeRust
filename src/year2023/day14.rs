@@ -126,12 +126,12 @@ impl Day14 {
 }
 
 impl Day for Day14 {
-    fn part_1(&self) -> u64 {
+    fn part_1(&mut self) -> u64 {
         let north_rocks = Day14::move_north(&self.lines);
         Day14::calc_sum(north_rocks)
     }
 
-    fn part_2(&self) -> u64 {
+    fn part_2(&mut self) -> u64 {
         let mut res = self.lines.clone();
         let mut cache = HashMap::new();
         let mut cycle_start = 0;
