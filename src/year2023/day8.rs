@@ -85,7 +85,7 @@ impl Day8 {
 }
 
 impl Day for Day8 {
-    fn part_1(&self) -> u64 {
+    fn part_1(&mut self) -> u64 {
         let mut start = b"AAA";
         let mut count = 0;
         while start != b"ZZZ" {
@@ -101,7 +101,7 @@ impl Day for Day8 {
         count as u64
     }
 
-    fn part_2(&self) -> u64 {
+    fn part_2(&mut self) -> u64 {
         let distances:Vec<i32> = self.map.keys()
             .filter_map(|x| {
                 if x[2] == b'A' {

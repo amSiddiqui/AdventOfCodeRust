@@ -89,14 +89,14 @@ impl Day19 {
 }
 
 impl Day for Day19 {
-    fn part_1(&self) -> u64 {
+    fn part_1(&mut self) -> u64 {
         self.parts.iter()
             .filter_map(|part| if self.is_part_accepted(part) {
                 Some(part.values().sum::<u32>() as u64)
             } else { None }).sum()
     }
 
-    fn part_2(&self) -> u64 {
+    fn part_2(&mut self) -> u64 {
         let part_ranges: HashMap<char, [u32; 2]> = vec![
             ('x', [1, 4000]),
             ('m', [1, 4000]),

@@ -32,7 +32,7 @@ impl Day2 {
 }
 
 impl Day for Day2 {
-    fn part_1(&self) -> u64 {
+    fn part_1(&mut self) -> u64 {
         self.lines.par_iter().enumerate().filter_map(|(id, line)| {
             let mut parts = line.splitn(2, ':').skip(1);
             let is_game_possible = parts.next()
@@ -62,7 +62,7 @@ impl Day for Day2 {
         }).sum::<u64>()
     }
 
-    fn part_2(&self) -> u64 {
+    fn part_2(&mut self) -> u64 {
         self.lines.par_iter().map(|line| {
             let game_line = line.split_once(':').map(|x| x.1).expect("Game line not present");
             let mut min_red = 0;

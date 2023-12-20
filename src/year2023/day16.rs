@@ -191,14 +191,14 @@ impl Day16 {
 }
 
 impl Day for Day16 {
-    fn part_1(&self) -> u64 {
+    fn part_1(&mut self) -> u64 {
         self.start_travel(Beam {
             direction: Direction::East,
             point: Point { x: 0, y: 0 }
         })
     }
 
-    fn part_2(&self) -> u64 {
+    fn part_2(&mut self) -> u64 {
         let mut beams: Vec<Beam> = vec![];
         for i in 0..self.bound.y {
             beams.push(Beam {

@@ -54,13 +54,13 @@ impl Day1 {
 }
 
 impl Day for Day1 {
-    fn part_1(&self) -> u64 {
+    fn part_1(&mut self) -> u64 {
         self.lines.par_iter().map(|line| {
             Day1::first_digit(line) * 10 + Day1::last_digit(line)
         }).sum::<u32>() as u64
     }
 
-    fn part_2(&self) -> u64 {
+    fn part_2(&mut self) -> u64 {
         let res = self.lines.par_iter().map(|x| {
             let mut new_line = x.clone();
             for (key, val) in WORD_DIGIT_MAP.iter() {

@@ -88,7 +88,7 @@ impl Day12 {
 }
 
 impl Day for Day12 {
-    fn part_1(&self) -> u64 {
+    fn part_1(&mut self) -> u64 {
         let cache = Arc::new(Mutex::new(HashMap::new()));
         let res: u64 = self.lines.par_iter()
             .map(|(line, nums)| {
@@ -98,7 +98,7 @@ impl Day for Day12 {
         res
     }
 
-    fn part_2(&self) -> u64 {
+    fn part_2(&mut self) -> u64 {
         let cache = Arc::new(Mutex::new(HashMap::new()));
         let res: u64 = self.lines.par_iter()
             .map(|(line, nums)| {

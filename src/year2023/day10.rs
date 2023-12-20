@@ -234,7 +234,7 @@ impl Day10 {
 }
 
 impl Day for Day10 {
-    fn part_1(&self) -> u64 {
+    fn part_1(&mut self) -> u64 {
         let starting_location = self.get_starting_location()
             .expect("Starting position not provided");
 
@@ -263,7 +263,7 @@ impl Day for Day10 {
         (max_visited as u64 + 1) / 2_u64
     }
 
-    fn part_2(&self) -> u64 {
+    fn part_2(&mut self) -> u64 {
         let starting_location = self.get_starting_location()
             .expect("Starting position not provided");
         let south_start = starting_location.south_move();
