@@ -20,7 +20,7 @@ impl Day5 {
     }
 
     pub fn new() -> Self {
-        let data = fs::read_to_string("data/day5")
+        let data = fs::read_to_string("data/year2023/day5")
             .unwrap_or_else(|err| panic!("Error reading file {}", err));
         let mut parts = data.split("\n\n");
         let seeds: Vec<u64> = parts.next()

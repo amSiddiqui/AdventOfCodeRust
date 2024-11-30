@@ -8,7 +8,7 @@ pub struct Day9 {
 
 impl Day9 {
     pub fn new() -> Self {
-        let data = fs::read_to_string("data/day9")
+        let data = fs::read_to_string("data/year2023/day9")
             .unwrap_or_else(|err| panic!("Error reading file {}", err));
         let mut sequences = Vec::new();
         for d in data.split('\n') {

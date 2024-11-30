@@ -22,7 +22,7 @@ pub struct Day15 {
 
 impl Day15 {
     pub fn new() -> Self {
-        let lens_str = fs::read_to_string("data/day15")
+        let lens_str = fs::read_to_string("data/year2023/day15")
             .expect("Cannot read input file")
             .split(',')
             .filter_map(|x| if x.is_empty() { None } else { Some(String::from(x)) })

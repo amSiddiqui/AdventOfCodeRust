@@ -9,7 +9,7 @@ pub struct Day6 {
 
 impl Day6 {
     pub fn new() -> Self {
-        let data = fs::read_to_string("data/day6")
+        let data = fs::read_to_string("data/year2023/day6")
             .unwrap_or_else(|x| panic!("Empty input provided: {}", x));
         let lines:Vec<&str> = data.split('\n').collect();
         if lines.len() < 2 {

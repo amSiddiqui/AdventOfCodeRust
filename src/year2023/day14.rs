@@ -8,8 +8,8 @@ pub struct Day14 {
 
 impl Day14 {
     pub fn new() -> Self {
-        let lines = fs::read_to_string("data/day14")
-            .expect("Cannot read from file data/day14")
+        let lines = fs::read_to_string("data/year2023/day14")
+            .expect("Cannot read from file data/year2023/day14")
             .split('\n')
             .map(|x| x.chars().collect::<Vec<_>>())
             .collect::<Vec<_>>();
