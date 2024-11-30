@@ -166,7 +166,7 @@ impl Day7 {
     }
 
     fn get_input() -> String {
-        let data_path = "data/day7";
+        let data_path = "data/year2023/day7";
         fs::read_to_string(data_path).unwrap_or_default()
     }
 

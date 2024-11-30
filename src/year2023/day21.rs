@@ -42,7 +42,7 @@ impl Point {
 
 impl Day21 {
     pub fn new() -> Self {
-        let lines = fs::read_to_string("data/day21")
+        let lines = fs::read_to_string("data/year2023/day21")
             .expect("Cannot read file")
             .split('\n')
             .map(|x| x.chars().collect::<Vec<_>>())

@@ -9,7 +9,7 @@ pub struct Day19 {
 
 impl Day19 {
     pub fn new() -> Self {
-        let data = fs::read_to_string("data/day19")
+        let data = fs::read_to_string("data/year2023/day19")
             .expect("Cannot read input file");
         let (workflow_str, parts_str) = data
             .split_once("\n\n")

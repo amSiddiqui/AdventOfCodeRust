@@ -20,7 +20,7 @@ impl Day8 {
         }
     }
     pub fn new() -> Day8 {
-        let data = fs::read_to_string("data/day8").unwrap_or_default();
+        let data = fs::read_to_string("data/year2023/day8").unwrap_or_default();
         assert!(!data.is_empty(), "Input file is empty");
         let mut parts = data.split_terminator('\n');
         let moves: Vec<bool> = parts.next().unwrap_or_else(|| panic!("Insufficient data"))

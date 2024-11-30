@@ -8,7 +8,7 @@ pub struct Day22 {
 
 impl Day22 {
     pub fn new() -> Self {
-        let mut bricks = fs::read_to_string("data/day22")
+        let mut bricks = fs::read_to_string("data/year2023/day22")
             .expect("Cannot read file")
             .split('\n')
             .map(|line| {

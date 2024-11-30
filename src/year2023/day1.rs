@@ -4,6 +4,7 @@ use crate::traits::Day;
 use rayon::prelude::*;
 use lazy_static::lazy_static;
 use regex::Regex;
+use std::env;
 
 lazy_static! {
     static ref WORD_DIGIT_MAP: HashMap<String, u32> = {
@@ -29,7 +30,7 @@ pub struct Day1 {
 
 impl Day1 {
     pub fn new() -> Self {
-        let lines = fs::read_to_string("data/day1")
+        let lines = fs::read_to_string("data/year2023/day1")
             .expect("Cannot read file")
             .split('\n')
             .map(String::from)

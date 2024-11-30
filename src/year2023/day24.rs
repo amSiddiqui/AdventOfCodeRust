@@ -11,7 +11,7 @@ pub struct Day24 {
 
 impl Day24 {
     pub fn new() -> Self {
-        let lines = fs::read_to_string("data/day24")
+        let lines = fs::read_to_string("data/year2023/day24")
             .expect("Cannot read file")
             .split('\n')
             .map(|line| {

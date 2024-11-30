@@ -109,7 +109,7 @@ pub struct Day23 {
 
 impl Day23 {
     pub fn new() -> Self {
-        let graph = fs::read_to_string("data/day23")
+        let graph = fs::read_to_string("data/year2023/day23")
             .expect("Cannot read file")
             .split('\n')
             .map(|x| x.chars().collect::<Vec<_>>())

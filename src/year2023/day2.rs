@@ -20,7 +20,7 @@ pub struct Day2 {
 
 impl Day2 {
     pub fn new() -> Self {
-        let lines = fs::read_to_string("data/day2")
+        let lines = fs::read_to_string("data/year2023/day2")
             .unwrap_or_else(|er| panic!("Error reading the file. Err {er}"))
             .split('\n')
             .map(String::from)

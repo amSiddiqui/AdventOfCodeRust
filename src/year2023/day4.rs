@@ -9,7 +9,7 @@ pub struct Day4 {
 
 impl Day4 {
     pub fn new() -> Self {
-        let data = fs::read_to_string("data/day4")
+        let data = fs::read_to_string("data/year2023/day4")
             .unwrap_or_else(|err| panic!("Error reading file;;Err {}", err));
 
         let lines:Vec<_> = data
