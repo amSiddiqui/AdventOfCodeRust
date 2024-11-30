@@ -5,6 +5,7 @@ mod traits;
 use clap::Parser;
 use crate::traits::Day;
 use std::{time::Instant, collections::HashMap};
+use memory_stats::memory_stats;
 
 const VALID_YEARS: [u32; 2] = [2023, 2024];
 
@@ -66,6 +67,7 @@ fn main() {
             day_constructors.insert(22, Box::new(|| Box::new(year2023::day22::Day22::new()) as Box<dyn Day>));
             day_constructors.insert(23, Box::new(|| Box::new(year2023::day23::Day23::new()) as Box<dyn Day>));
             day_constructors.insert(24, Box::new(|| Box::new(year2023::day24::Day24::new()) as Box<dyn Day>));
+            day_constructors.insert(25, Box::new(|| Box::new(year2023::day25::Day25::new()) as Box<dyn Day>));
         },
         2024 => {
             day_constructors.insert(1, Box::new(|| Box::new(year2024::day1::Day1::new()) as Box<dyn Day>));
@@ -76,24 +78,40 @@ fn main() {
     };
     match day_constructors.get(&args.day) {
         Some(constructor) => {
-            let day = constructor();
-            run_part(day, args.part);
+            let mut day = constructor();
+            run_part(&mut day, args.part);
         },
         _ => panic!("Solution for day {} and year {} is not implemented yet", args.day, args.year),   
     }
 }
 
-fn run_part(mut day: Box<dyn Day>, part: u32) {
-    if part == 1 || part == 0 {
-        let start = Instant::now();
-        let s1 = day.part_1();
-        let dur = start.elapsed();
-        println!("Part 1 solution = {}  ;; Took {:?}", s1, dur);
-    }
-    if part == 2 || part == 0 {
-        let start = Instant::now();
-        let s2 = day.part_2();
-        let dur = start.elapsed();
-        println!("Part 2 solution = {}  ;; Took {:?}", s2, dur);
-    }
+fn run_part(day: &mut Box<dyn Day>, part: u32) {
+    let mut solution_fn: Box<dyn FnMut() -> u64> = match part {
+        1 => Box::new(move || day.part_1()),
+        2 => Box::new(move || day.part_2()),
+        0 => {
+            println!("Running both parts:");
+            run_part(day, 1);
+            run_part(day, 2);
+            return;
+        }
+        _ => panic!("Invalid part: {}. Part must be 1, 2, or 0 for both.", part),
+    };
+
+    let start_mem = memory_stats()
+        .and_then(|m| Some(m.physical_mem))
+        .unwrap_or(0);
+    let start = Instant::now();
+    let result = solution_fn();
+    let duration = start.elapsed();
+    let end_mem = memory_stats()
+        .and_then(|m| Some(m.physical_mem))
+        .unwrap_or(0);
+
+    let mem_used = end_mem.saturating_sub(start_mem) / 1024;
+
+    println!(
+        "Solution = {} ;; Took {:?} ;; Memory used: {} KB",
+        result, duration, mem_used
+    );
 }
