@@ -4,7 +4,6 @@ use crate::traits::Day;
 use rayon::prelude::*;
 use lazy_static::lazy_static;
 use regex::Regex;
-use std::env;
 
 lazy_static! {
     static ref WORD_DIGIT_MAP: HashMap<String, u32> = {
