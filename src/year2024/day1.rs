@@ -8,20 +8,16 @@ pub struct Day1 {
 
 impl Day1 {
     pub fn new() -> Self {
-        let mut list1 = vec![];
-        let mut list2 = vec![];
-        fs::read_to_string("data/year2024/day1")
-            .expect("cannot read data")
-            .split('\n')
-            .for_each(|line| {
+        let (mut list1, mut list2): (Vec<u64>, Vec<u64>) = fs::read_to_string("data/year2024/day1")
+            .expect("Cannot read data")
+            .lines()
+            .filter_map(|line| {
                 let mut parts = line.split_ascii_whitespace();
-                let n1 = u64::from_str_radix(parts.next().expect("cannot extract line"), 10)
-                    .expect("cannot parse line");
-                let n2 = u64::from_str_radix(parts.next().expect("cannot extract line"), 10)
-                    .expect("cannot parse line");
-                list1.push(n1);
-                list2.push(n2);
-            });
+                let n1: u64 = parts.next()?.parse().ok()?;
+                let n2: u64 = parts.next()?.parse().ok()?;
+                Some((n1, n2))
+            })
+            .unzip();
 
         list1.sort();
         list2.sort();
