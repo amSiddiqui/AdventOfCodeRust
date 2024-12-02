@@ -22,7 +22,7 @@ impl Day2 {
     }
 
     pub fn is_safe(&self, arr: &Vec<i32>) -> bool {
-        let increasing = (arr[1] - arr[0]) > 0;
+        let increasing = arr[1] > arr[0];
         for i in 0..arr.len()-1 {
             let mut diff = arr[i+1] - arr[i];
             if increasing && diff < 0 {
@@ -38,7 +38,7 @@ impl Day2 {
                 return false;
             }
         }
-        return true;
+        true
     }
 }
 
