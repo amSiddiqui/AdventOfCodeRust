@@ -6,8 +6,20 @@ pub struct Day3 {
     line: String,
 }
 
-fn find_closest_smaller(vec: &[usize], target: usize) -> Option<usize> {
-    vec.iter().filter(|&&x| x < target).max().copied()
+fn find_closest_smaller(arr: &[usize], target: usize) -> Option<usize> {
+    if arr.is_empty() {
+        return None;
+    }
+    let idx = match arr.binary_search(&target) {
+        Ok(idx) => idx,
+        Err(idx) => idx,
+    };
+
+    if idx > 0 {
+        Some(arr[idx - 1])
+    } else {
+        None
+    }
 }
 
 impl Day3 {
@@ -62,11 +74,10 @@ impl Day for Day3 {
 
             let d_i = find_closest_smaller(&do_idx, pos).unwrap_or(0);
             let dnt_i = find_closest_smaller(&dont_idx, pos).unwrap_or(0);
-        
-            if d_i > dnt_i {
-                sum += a*b;
-            }
 
+            if d_i > dnt_i {
+                sum += a * b;
+            }
         }
         sum
     }
