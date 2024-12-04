@@ -73,6 +73,7 @@ fn main() {
             day_constructors.insert(1, Box::new(|| Box::new(year2024::day1::Day1::new()) as Box<dyn Day>));
             day_constructors.insert(2, Box::new(|| Box::new(year2024::day2::Day2::new()) as Box<dyn Day>));
             day_constructors.insert(3, Box::new(|| Box::new(year2024::day3::Day3::new()) as Box<dyn Day>));
+            day_constructors.insert(4, Box::new(|| Box::new(year2024::day4::Day4::new()) as Box<dyn Day>));
         },
         _ => {
             panic!("Solution for year {} is not implemented yet", args.year);
