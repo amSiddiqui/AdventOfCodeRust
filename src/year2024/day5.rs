@@ -1,5 +1,6 @@
 use std::{collections::HashMap, fs};
 
+use rayon::prelude::*;
 use crate::traits::Day;
 
 pub struct Day5 {
@@ -56,8 +57,7 @@ impl Day5 {
         true
     }
 
-    pub fn make_valid(&mut self, i: usize) -> u64 {
-        let page = &mut self.pages[i];
+    pub fn make_valid_page(rules: &HashMap<u64, Vec<u64>>, page: &mut Vec<u64>) -> u64 {
         let mut idx_map: HashMap<u64, usize> = HashMap::new();
         for (idx, val) in page.iter().enumerate() {
             idx_map.insert(*val, idx);
@@ -66,7 +66,7 @@ impl Day5 {
         loop {
             let mut swap_pairs = vec![];
             for (idx, val) in page.iter().enumerate() {
-                if let Some(pairs) = self.rules.get(val) {
+                if let Some(pairs) = rules.get(val) {
                     for pair in pairs {
                         if let Some(pair_idx) = idx_map.get(pair) {
                             if *pair_idx < idx {
@@ -76,22 +76,20 @@ impl Day5 {
                         }
                     }
                 }
-                if swap_pairs.len() > 0 {
+                if !swap_pairs.is_empty() {
                     break;
                 }
             }
-            if swap_pairs.len() == 0 {
+            if swap_pairs.is_empty() {
                 break;
             } else {
                 for (i, j) in swap_pairs {
                     page.swap(i, j);
-
                     idx_map.insert(page[i], i);
                     idx_map.insert(page[j], j);
                 }
             }
         }
-
         if was_invalid {
             page[page.len() / 2]
         } else {
@@ -113,6 +111,10 @@ impl Day for Day5 {
     }
 
     fn part_2(&mut self) -> u64 {
-        (0..self.pages.len()).map(|i| self.make_valid(i)).sum()
+        let rules = &self.rules;
+        self.pages
+            .par_iter_mut()
+            .map(|page| Day5::make_valid_page(rules, page))
+            .sum()
     }
 }
