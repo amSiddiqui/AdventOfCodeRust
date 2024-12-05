@@ -101,7 +101,7 @@ fn run_part(day: &mut Box<dyn Day>, part: u32) {
         }
         _ => panic!("Invalid part: {}. Part must be 1, 2, or 0 for both.", part),
     };
-
+    // TODO: Find a more accurate memory stats measurement. Maybe measure memory of the binary
     let start_mem = memory_stats()
         .and_then(|m| Some(m.physical_mem))
         .unwrap_or(0);
