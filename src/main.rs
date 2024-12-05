@@ -5,7 +5,6 @@ mod traits;
 use clap::Parser;
 use crate::traits::Day;
 use std::{time::Instant, collections::HashMap};
-use memory_stats::memory_stats;
 
 const VALID_YEARS: [u32; 2] = [2023, 2024];
 
@@ -101,21 +100,12 @@ fn run_part(day: &mut Box<dyn Day>, part: u32) {
         }
         _ => panic!("Invalid part: {}. Part must be 1, 2, or 0 for both.", part),
     };
-    // TODO: Find a more accurate memory stats measurement. Maybe measure memory of the binary
-    let start_mem = memory_stats()
-        .and_then(|m| Some(m.physical_mem))
-        .unwrap_or(0);
     let start = Instant::now();
     let result = solution_fn();
     let duration = start.elapsed();
-    let end_mem = memory_stats()
-        .and_then(|m| Some(m.physical_mem))
-        .unwrap_or(0);
-
-    let mem_used = end_mem.saturating_sub(start_mem) / 1024;
-
+    
     println!(
-        "Solution = {} ;; Took {:?} ;; Memory used: {} KB",
-        result, duration, mem_used
+        "Solution = {} ;; Took {:?}",
+        result, duration
     );
 }
