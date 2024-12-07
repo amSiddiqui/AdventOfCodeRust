@@ -53,6 +53,22 @@ fn check_if_any_combination(res: u64, series: &[u64]) -> bool {
     false
 }
 
+fn concat_numbers(a: u64, b: u64) -> u64 {
+    let mut m = 1;
+    let mut t = b;
+    
+    if t == 0 {
+        return a * 10;
+    }
+
+    while t > 0 {
+        t /= 10;
+        m *= 10;
+    }
+
+    a * m + b
+}
+
 fn check_if_any_combination_with_concat(res: u64, series: &[u64]) -> bool {
     let ops = ['*', '+', '|'];
     let combos = (0..series.len() - 1)
@@ -63,14 +79,14 @@ fn check_if_any_combination_with_concat(res: u64, series: &[u64]) -> bool {
         let mut start = match combo[0] {
             '*' => series[0] * series[1],
             '+' => series[0] + series[1],
-            _ => format!("{}{}", series[0], series[1]).parse().unwrap(),
+            _ => concat_numbers(series[0], series[1]),
         };
         for i in 2..series.len() {
             match combo[i - 1] {
                 '*' => start *= series[i],
                 '+' => start += series[i],
                 _ => {
-                    start = format!("{}{}", start, series[i]).parse().unwrap();
+                    start = concat_numbers(start, series[i]);
                 }
             }
         }
