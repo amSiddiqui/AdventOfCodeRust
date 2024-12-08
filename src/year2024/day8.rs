@@ -6,7 +6,7 @@ use std::{
 };
 
 pub struct Day8 {
-    lines: Vec<Vec<char>>,
+    bound: (i32, i32),
     freqs: HashMap<char, Vec<(i32, i32)>>,
 }
 
@@ -27,8 +27,10 @@ impl Day8 {
                 (*freqs.entry(*ch).or_insert(vec![])).push((x as i32, y as i32));
             }
         }
-
-        Day8 { lines, freqs }
+        let x_lim = lines[0].len() as i32;
+        let y_lim = lines.len() as i32;
+        let bound = (x_lim, y_lim);
+        Day8 { bound, freqs }
     }
 }
 
@@ -39,9 +41,7 @@ fn point_in_bound(point: &(i32, i32), bound: &(i32, i32)) -> bool {
 impl Day for Day8 {
     fn part_1(&mut self) -> u64 {
         let mut antinodes = HashSet::new();
-        let x_lim = self.lines[0].len() as i32;
-        let y_lim = self.lines.len() as i32;
-        let bound = (x_lim, y_lim);
+        let bound = self.bound;
         for arr in self.freqs.values() {
             for pair in arr.iter().combinations(2) {
                 let a = pair[0];
@@ -66,9 +66,7 @@ impl Day for Day8 {
 
     fn part_2(&mut self) -> u64 {
         let mut antinodes = HashSet::new();
-        let x_lim = self.lines[0].len() as i32;
-        let y_lim = self.lines.len() as i32;
-        let bound = (x_lim, y_lim);
+        let bound = self.bound;
         for arr in self.freqs.values() {
             antinodes.extend(arr.iter().cloned());
             for pair in arr.iter().combinations(2) {
