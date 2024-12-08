@@ -4,7 +4,7 @@ mod traits;
 
 use clap::Parser;
 use crate::traits::Day;
-use std::{time::Instant, collections::HashMap};
+use std::time::Instant;
 
 const VALID_YEARS: [u32; 2] = [2023, 2024];
 
@@ -39,56 +39,47 @@ fn main() {
     if args.part > 2 {
         panic!("Valid part can only be 1 or 2");
     }
-    let mut day_constructors: HashMap<u32, Box<dyn Fn() -> Box<dyn Day>>> = HashMap::new();
-    match args.year {
-        2023 => {        
-            day_constructors.insert(1, Box::new(|| Box::new(year2023::day1::Day1::new()) as Box<dyn Day>));
-            day_constructors.insert(2, Box::new(|| Box::new(year2023::day2::Day2::new()) as Box<dyn Day>));
-            day_constructors.insert(3, Box::new(|| Box::new(year2023::day3::Day3::new()) as Box<dyn Day>));
-            day_constructors.insert(4, Box::new(|| Box::new(year2023::day4::Day4::new()) as Box<dyn Day>));
-            day_constructors.insert(5, Box::new(|| Box::new(year2023::day5::Day5::new()) as Box<dyn Day>));
-            day_constructors.insert(6, Box::new(|| Box::new(year2023::day6::Day6::new()) as Box<dyn Day>));
-            day_constructors.insert(7, Box::new(|| Box::new(year2023::day7::Day7::new()) as Box<dyn Day>));
-            day_constructors.insert(8, Box::new(|| Box::new(year2023::day8::Day8::new()) as Box<dyn Day>));
-            day_constructors.insert(9, Box::new(|| Box::new(year2023::day9::Day9::new()) as Box<dyn Day>));
-            day_constructors.insert(10, Box::new(|| Box::new(year2023::day10::Day10::new()) as Box<dyn Day>));
-            day_constructors.insert(11, Box::new(|| Box::new(year2023::day11::Day11::new()) as Box<dyn Day>));
-            day_constructors.insert(12, Box::new(|| Box::new(year2023::day12::Day12::new()) as Box<dyn Day>));
-            day_constructors.insert(13, Box::new(|| Box::new(year2023::day13::Day13::new()) as Box<dyn Day>));
-            day_constructors.insert(14, Box::new(|| Box::new(year2023::day14::Day14::new()) as Box<dyn Day>));
-            day_constructors.insert(15, Box::new(|| Box::new(year2023::day15::Day15::new()) as Box<dyn Day>));
-            day_constructors.insert(16, Box::new(|| Box::new(year2023::day16::Day16::new()) as Box<dyn Day>));
-            day_constructors.insert(17, Box::new(|| Box::new(year2023::day17::Day17::new()) as Box<dyn Day>));
-            day_constructors.insert(18, Box::new(|| Box::new(year2023::day18::Day18::new()) as Box<dyn Day>));
-            day_constructors.insert(19, Box::new(|| Box::new(year2023::day19::Day19::new()) as Box<dyn Day>));
-            day_constructors.insert(20, Box::new(|| Box::new(year2023::day20::Day20::new()) as Box<dyn Day>));
-            day_constructors.insert(21, Box::new(|| Box::new(year2023::day21::Day21::new()) as Box<dyn Day>));
-            day_constructors.insert(22, Box::new(|| Box::new(year2023::day22::Day22::new()) as Box<dyn Day>));
-            day_constructors.insert(23, Box::new(|| Box::new(year2023::day23::Day23::new()) as Box<dyn Day>));
-            day_constructors.insert(24, Box::new(|| Box::new(year2023::day24::Day24::new()) as Box<dyn Day>));
-            day_constructors.insert(25, Box::new(|| Box::new(year2023::day25::Day25::new()) as Box<dyn Day>));
-        },
-        2024 => {
-            day_constructors.insert(1, Box::new(|| Box::new(year2024::day1::Day1::new()) as Box<dyn Day>));
-            day_constructors.insert(2, Box::new(|| Box::new(year2024::day2::Day2::new()) as Box<dyn Day>));
-            day_constructors.insert(3, Box::new(|| Box::new(year2024::day3::Day3::new()) as Box<dyn Day>));
-            day_constructors.insert(4, Box::new(|| Box::new(year2024::day4::Day4::new()) as Box<dyn Day>));
-            day_constructors.insert(5, Box::new(|| Box::new(year2024::day5::Day5::new()) as Box<dyn Day>));
-            day_constructors.insert(6, Box::new(|| Box::new(year2024::day6::Day6::new()) as Box<dyn Day>));
-            day_constructors.insert(7, Box::new(|| Box::new(year2024::day7::Day7::new()) as Box<dyn Day>));
-            day_constructors.insert(8, Box::new(|| Box::new(year2024::day8::Day8::new()) as Box<dyn Day>));
-        },
-        _ => {
-            panic!("Solution for year {} is not implemented yet", args.year);
-        }
+    
+    let mut day: Box<dyn Day> = match (args.year, args.day) {
+        (2023, 1) => Box::new(year2023::day1::Day1::new()),
+        (2023, 2) => Box::new(year2023::day2::Day2::new()),
+        (2023, 3) => Box::new(year2023::day3::Day3::new()),
+        (2023, 4) => Box::new(year2023::day4::Day4::new()),
+        (2023, 5) => Box::new(year2023::day5::Day5::new()),
+        (2023, 6) => Box::new(year2023::day6::Day6::new()),
+        (2023, 7) => Box::new(year2023::day7::Day7::new()),
+        (2023, 8) => Box::new(year2023::day8::Day8::new()),
+        (2023, 9) => Box::new(year2023::day9::Day9::new()),
+        (2023, 10) => Box::new(year2023::day10::Day10::new()),
+        (2023, 11) => Box::new(year2023::day11::Day11::new()),
+        (2023, 12) => Box::new(year2023::day12::Day12::new()),
+        (2023, 13) => Box::new(year2023::day13::Day13::new()),
+        (2023, 14) => Box::new(year2023::day14::Day14::new()),
+        (2023, 15) => Box::new(year2023::day15::Day15::new()),
+        (2023, 16) => Box::new(year2023::day16::Day16::new()),
+        (2023, 17) => Box::new(year2023::day17::Day17::new()),
+        (2023, 18) => Box::new(year2023::day18::Day18::new()),
+        (2023, 19) => Box::new(year2023::day19::Day19::new()),
+        (2023, 20) => Box::new(year2023::day20::Day20::new()),
+        (2023, 21) => Box::new(year2023::day21::Day21::new()),
+        (2023, 22) => Box::new(year2023::day22::Day22::new()),
+        (2023, 23) => Box::new(year2023::day23::Day23::new()),
+        (2023, 24) => Box::new(year2023::day24::Day24::new()),
+        (2023, 25) => Box::new(year2023::day25::Day25::new()),
+
+        (2024, 1) => Box::new(year2024::day1::Day1::new()),
+        (2024, 2) => Box::new(year2024::day2::Day2::new()),
+        (2024, 3) => Box::new(year2024::day3::Day3::new()),
+        (2024, 4) => Box::new(year2024::day4::Day4::new()),
+        (2024, 5) => Box::new(year2024::day5::Day5::new()),
+        (2024, 6) => Box::new(year2024::day6::Day6::new()),
+        (2024, 7) => Box::new(year2024::day7::Day7::new()),
+        (2024, 8) => Box::new(year2024::day8::Day8::new()),
+
+        _ => panic!("Solution for day {} and year {} is not implemented yet", args.day, args.year),
     };
-    match day_constructors.get(&args.day) {
-        Some(constructor) => {
-            let mut day = constructor();
-            run_part(&mut day, args.part);
-        },
-        _ => panic!("Solution for day {} and year {} is not implemented yet", args.day, args.year),   
-    }
+
+    run_part(&mut day, args.part);
 }
 
 fn run_part(day: &mut Box<dyn Day>, part: u32) {
