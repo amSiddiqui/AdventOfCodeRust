@@ -33,48 +33,49 @@ impl Day for Day9 {
     fn part_1(&mut self) -> u64 {
         let mut i = 0;
         let mut j = self.input.len() - 1;
+        let mut input = self.input.clone();
         if j % 2 == 1 {
             j -= 1;
         }
 
-        // println!("Input: {:?}", self.input);
+        // println!("Input: {:?}", input);
 
         let mut idx_sum = 0;
         let mut res = 0;
         while i <= j {
-            // println!("i={}, j={}, input={:?}", i, j, self.input);
+            // println!("i={}, j={}, input={:?}", i, j, input);
             if i % 2 == 0 {
-                res += find_multiply_sum(idx_sum, self.input[i] as usize, i);
-                idx_sum += self.input[i] as usize;
+                res += find_multiply_sum(idx_sum, input[i] as usize, i);
+                idx_sum += input[i] as usize;
                 i += 1;
                 continue;
             }
 
             // handle empty space
 
-            if self.input[i] > self.input[j] {
-                res += find_multiply_sum(idx_sum, self.input[j] as usize, j);
-                idx_sum += self.input[j] as usize;
-                self.input[i] -= self.input[j];
-                self.input[j] = 0;
+            if input[i] > input[j] {
+                res += find_multiply_sum(idx_sum, input[j] as usize, j);
+                idx_sum += input[j] as usize;
+                input[i] -= input[j];
+                input[j] = 0;
                 j -= 2;
                 continue;
             }
 
-            if self.input[i] < self.input[j] {
-                res += find_multiply_sum(idx_sum, self.input[i] as usize, j);
-                idx_sum += self.input[i] as usize;
-                self.input[j] -= self.input[i];
-                self.input[i] = 0;
+            if input[i] < input[j] {
+                res += find_multiply_sum(idx_sum, input[i] as usize, j);
+                idx_sum += input[i] as usize;
+                input[j] -= input[i];
+                input[i] = 0;
                 i += 1;
                 continue;
             }
 
-            if self.input[i] == self.input[j] {
-                res += find_multiply_sum(idx_sum, self.input[i] as usize, j);
-                idx_sum += self.input[i] as usize;
-                self.input[i] = 0;
-                self.input[j] = 0;
+            if input[i] == input[j] {
+                res += find_multiply_sum(idx_sum, input[i] as usize, j);
+                idx_sum += input[i] as usize;
+                input[i] = 0;
+                input[j] = 0;
                 i += 1;
                 j -= 2;
                 continue;
