@@ -75,6 +75,7 @@ fn main() {
         (2024, 6) => Box::new(year2024::day6::Day6::new()),
         (2024, 7) => Box::new(year2024::day7::Day7::new()),
         (2024, 8) => Box::new(year2024::day8::Day8::new()),
+        (2024, 9) => Box::new(year2024::day9::Day9::new()),
 
         _ => panic!("Solution for day {} and year {} is not implemented yet", args.day, args.year),
     };
