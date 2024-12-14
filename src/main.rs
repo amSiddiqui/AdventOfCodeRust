@@ -1,9 +1,7 @@
-mod year2023;
-mod year2024;
-mod traits;
-
 use clap::Parser;
-use crate::traits::Day;
+use aoc::traits::Day;
+use aoc::year2023;
+use aoc::year2024;
 use std::time::Instant;
 
 const VALID_YEARS: [u32; 2] = [2023, 2024];
