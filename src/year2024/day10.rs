@@ -11,8 +11,8 @@ enum Dir {
 }
 
 pub struct Day10 {
-    lines: Vec<Vec<u8>>,
-    starting: Vec<(usize, usize)>,
+    pub lines: Vec<Vec<u8>>,
+    pub starting: Vec<(usize, usize)>,
 }
 
 impl Day10 {
@@ -115,7 +115,6 @@ impl Day for Day10 {
         for starts in &self.starting {
             let mut visited = HashSet::new();
             let res = graph_traverse(&self.lines, starts.0, starts.1, 1, &mut visited);
-            // println!("{starts:?}, {res}");
             total += res;
         }
         total
