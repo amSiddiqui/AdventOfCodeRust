@@ -93,7 +93,7 @@ impl Day for Day14 {
             self.step();
         }
 
-        // quadrant 1
+        // quadrants
         let quads = [
             ((0, 0), (self.lim.0 / 2 - 1, self.lim.1 / 2 - 1)),
             ((self.lim.0 / 2 + 1, 0), (self.lim.0, self.lim.1 / 2 - 1)),
