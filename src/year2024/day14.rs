@@ -3,7 +3,7 @@ use std::{collections::HashSet, fs};
 use crate::traits::Day;
 
 pub struct Day14 {
-    data: Vec<((i32, i32), (i32, i32))>,
+    pub data: Vec<((i32, i32), (i32, i32))>,
     lim: (i32, i32),
 }
 
