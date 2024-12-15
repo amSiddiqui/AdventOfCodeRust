@@ -6,7 +6,7 @@ use macroquad::prelude::*;
 const FONT_SIZE: f32 = 14.;
 const FONT_COLOR: Color = GRAY;
 const BACKGROUND_COLOR: Color = WHITE;
-const TARGET_FPS: f32 = 15.0;
+const TARGET_FPS: f32 = 30.0;
 
 fn graph_traverse(
     graph: &Vec<Vec<u8>>,
@@ -56,7 +56,7 @@ fn window_conf() -> Conf {
 pub async fn main() {
     let day = Day10::new();
     let colors = [
-        BLUE, GREEN, RED, SKYBLUE, PURPLE, ORANGE, DARKPURPLE, DARKBLUE,
+        DARKBLUE, DARKGREEN, DARKPURPLE, DARKBROWN, RED, BLACK
     ];
     let mut data: Vec<Vec<(usize, usize, Color)>> = day
         .starting
