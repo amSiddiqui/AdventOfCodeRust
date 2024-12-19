@@ -10,6 +10,31 @@ To enhance performance, especially for computationally intensive tasks, these so
 
 The solutions are organized by year and day. Each year has its own directory, and within each year's directory, there are Rust files for each day of the challenge.
 
+### Input Data Structure
+
+Each challenge expects its input data to be placed in a specific folder structure under the `data` directory. The expected structure is as follows:
+
+```
+data/<YEAR>/day<DAY>
+```
+
+For example, for Day 19 of the 2024 challenges, the input file should be located at:
+```
+data/year2024/day19
+```
+
+The program reads this input file as demonstrated in the following code snippet:
+```rust
+impl Day19 {
+    pub fn new() -> Self {
+        let data = fs::read_to_string("data/year2024/day19").expect("Cannot read data file");
+        // -- snip --
+    }
+}
+```
+
+Make sure to either update the input file path in the code or place the input file in the correct folder before running the solution.
+
 ## Running the Solutions
 
 To run a solution, use the `cargo` command-line tool. The binary allows you to specify the year, day, and part of the challenge you want to execute.
