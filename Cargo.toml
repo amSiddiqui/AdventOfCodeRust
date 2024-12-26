@@ -17,6 +17,8 @@ memory-stats = "1.2.0"
 macroquad = "0.4.13"
 dashmap = "6.1.0"
 ahash = "0.8.11"
+rand = "0.8.5"
+anyhow = "1.0.95"
 
 [lib]
 name = "aoc"
