@@ -2,9 +2,10 @@ use clap::Parser;
 use aoc::traits::Day;
 use aoc::year2023;
 use aoc::year2024;
+use aoc::year2025;
 use std::time::Instant;
 
-const VALID_YEARS: [u32; 2] = [2023, 2024];
+const VALID_YEARS: [u32; 3] = [2023, 2024, 2025];
 
 
 /// Advent of code solutions
@@ -90,6 +91,8 @@ fn main() {
         (2024, 23) => Box::new(year2024::day23::Day23::new()),
         (2024, 24) => Box::new(year2024::day24::Day24::new()),
         (2024, 25) => Box::new(year2024::day25::Day25::new()),
+
+        (2025, 1) => Box::new(year2025::day1::Day1::new()),
 
         _ => panic!("Solution for day {} and year {} is not implemented yet", args.day, args.year),
     };
