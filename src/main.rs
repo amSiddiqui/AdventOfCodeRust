@@ -38,6 +38,7 @@ fn main() {
     if args.part > 2 {
         panic!("Valid part can only be 1 or 2");
     }
+    let start = Instant::now();
     
     let mut day: Box<dyn Day> = match (args.year, args.day) {
         (2023, 1) => Box::new(year2023::day1::Day1::new()),
@@ -98,6 +99,8 @@ fn main() {
 
         _ => panic!("Solution for day {} and year {} is not implemented yet", args.day, args.year),
     };
+    let duration = start.elapsed();
+    println!("Data loading = {:?}", duration);
 
     run_part(&mut day, args.part);
 }
