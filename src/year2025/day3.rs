@@ -10,9 +10,7 @@ impl Day3 {
         let data = fs::read_to_string("data/year2025/day3")
             .expect("Cannot read data")
             .lines()
-            .map(|line| {
-                line.chars().map(|c| c.to_digit(10).unwrap()).collect()
-            })
+            .map(|line| line.chars().map(|c| c.to_digit(10).unwrap()).collect())
             .collect();
         Day3 { data }
     }
@@ -25,20 +23,19 @@ fn largest_digit(line: &Vec<u32>, start: usize, end: usize) -> usize {
         let digit = line[i];
         if digit > last_digit {
             last_digit = digit;
-            large_idx = i; 
+            large_idx = i;
         }
     }
     large_idx
 }
-
 
 impl Day for Day3 {
     fn part_1(&mut self) -> u64 {
         let mut res = 0;
         for line in &self.data {
             let l = line.len();
-            let n = largest_digit(line, 0, l-1);
-            let m = largest_digit(line, n+1, l);
+            let n = largest_digit(line, 0, l - 1);
+            let m = largest_digit(line, n + 1, l);
             let num = 10 * line[n] + line[m];
             res += num;
         }
@@ -52,7 +49,7 @@ impl Day for Day3 {
             let l = line.len();
             let mut prev_n = 0;
             for i in 0..12 {
-                let n = largest_digit(line, prev_n, l-(12-i-1));
+                let n = largest_digit(line, prev_n, l - (12 - i - 1));
                 prev_n = n + 1;
                 digits.push(line[n]);
             }
