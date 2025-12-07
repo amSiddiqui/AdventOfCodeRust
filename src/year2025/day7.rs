@@ -97,17 +97,16 @@ impl Day for Day7 {
                 break;
             }
         }
-        let mut data = self.data.clone();
         let mut count = 0;
         self.data[start.1+1][start.0] = '|';
-        tick(&mut data, start.0, start.1 + 1, &mut count);
+        tick(&mut self.data, start.0, start.1 + 1, &mut count);
 
-        for lin in &data {
-            for ch in lin {
-                print!("{ch}");
-            }
-            println!();
-        }
+        // for lin in &self.data {
+        //     for ch in lin {
+        //         print!("{ch}");
+        //     }
+        //     println!();
+        // }
 
         count
     }
@@ -126,10 +125,9 @@ impl Day for Day7 {
                 break;
             }
         }
-        let mut data = self.data.clone();
-        data[start.1+1][start.0] = '|';
+        self.data[start.1+1][start.0] = '|';
         let mut cache: AHashMap<(usize, usize), u64> = AHashMap::new();
-        return tick2(&mut data, start.0, start.1 + 1, &mut cache);
+        return tick2(&mut self.data, start.0, start.1 + 1, &mut cache);
         
     }
 }
