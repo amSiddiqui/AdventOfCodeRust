@@ -76,6 +76,7 @@ impl Day8 {
     }
 }
 
+#[allow(dead_code)]
 fn print_cluster(clusters: &Vec<AHashSet<Point>>) {
     for (i, c) in clusters.iter().enumerate() {
         println!("Cluster {i}");
