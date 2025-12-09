@@ -1,7 +1,7 @@
-use ahash::{AHashMap, AHashSet};
+use ahash::{AHashMap};
 
 use crate::traits::Day;
-use std::{fs, time::Instant};
+use std::{fs};
 
 pub struct Day9 {
     data: Vec<(u64, u64)>,
@@ -101,58 +101,6 @@ fn within_bound(bounds: &AHashMap<u64, Vec<u64>>, y_bounds: &AHashMap<u64, Vec<u
     cache.insert(point, res);
     return res;
 }
-
-
-
-fn find_in_points(x_bounds: &AHashMap<u64, Vec<u64>>, y_bounds: &AHashMap<u64, Vec<u64>>, x_lim: u64, y_lim: u64) -> AHashSet<(u64, u64)> {
-    let mut in_points: AHashSet<(u64, u64)> = AHashSet::new();
-    let mut inside = false;
-    let mut previous_point: Option<(u64, u64)>  = None;
-    for y in 0..y_lim+1 {
-        let mut x = 0;
-        while x <= x_lim {
-            if let Some(prev_point) = previous_point {
-                if prev_point.0 == x && prev_point.1 == y {
-                    panic!("Loop stuck");
-                }
-            }
-            previous_point = Some((x, y));
-            if let Some(x_bound) = x_bounds.get(&x) {
-                if y >= x_bound[0] && y <= x_bound[1] {
-                    // on wall
-                    in_points.insert((x, y));
-                    if let Some(y_bound) = y_bounds.get(&y) {
-                        if x >= y_bound[0] && x <= y_bound[1] {
-                            // on corner
-                            let next_point = (y_bound[1], y);
-                            let next_x_bound = x_bounds.get(&next_point.0).expect("No point found");
-                            if (y > x_bound[0] && y > next_x_bound[0]) || (y < x_bound[1] && y < next_x_bound[1]) {
-                            } else {
-                                inside = !inside;
-                            }
-                            for i in x..next_point.0+1 {
-                                in_points.insert((i, y));
-                            }
-                            // println!("On point: ({x}, {y}) {next_point:?} {x_bound:?} {y_bound:?} {next_x_bound:?}");
-                            x = next_point.0 + 1;
-                            continue;
-                        }
-                    }
-                    inside = !inside;
-                    x += 1;
-                    continue;
-                }
-            }
-            if inside {
-                in_points.insert((x, y));
-            }
-            x += 1;
-        }
-    }
-    in_points
-} 
-
-
 
 
 impl Day for Day9 {
